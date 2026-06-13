@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>立克次体感染 PBMC 靶向入组决策系统</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #7f8c8d;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .app-container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            letter-spacing: 1px;
+        }
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        .form-body {
+            padding: 25px 20px;
+        }
+        .input-group {
+            margin-bottom: 16px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            background-color: #fdfdfd;
+        }
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background-color: white;
+        }
+        .input-wrapper.error input {
+            border-color: var(--accent-color);
+            background-color: #fdf1f0;
+        }
+        .error-msg {
+            display: none;
+            color: var(--accent-color);
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1a252f;
+        }
+        .btn-reset {
+            background-color: #ecf0f1;
+            color: var(--text-muted);
+            flex: 0.4;
+        }
+        .btn-reset:hover {
+            background-color: #bdc3c7;
+            color: var(--text-main);
+        }
+        #result-box {
+            display: none;
+            margin-top: 25px;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            animation: slideDown 0.4s ease forwards;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .prob-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .prob-value {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1;
+        }
+        .clinical-advice {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.75rem;
+            color: #bdc3c7;
+            border-top: 1px solid #f1f2f6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <h1>Sepsis 早期预警与靶向入组系统</h1>
+        <p>基于 1133 例真实世界多中心队列构建</p>
+    </div>
+    
+    <div class="form-body">
+        <div class="input-group">
+            <label>年龄 (Age)</label>
+            <div class="input-wrapper" id="wrap-age">
+                <input type="number" id="val-age" placeholder="输入患者年龄" min="0" step="1">
+                <div class="error-msg" id="err-age">请输入有效的年龄</div>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label>血小板 (PLT, ×10⁹/L)</label>
+            <div class="input-wrapper" id="wrap-plt">
+                <input type="number" id="val-plt" placeholder="例如: 45" min="0" step="1">
+                <div class="error-msg" id="err-plt">请输入血小板数值</div>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label>谷草转氨酶 (AST, U/L)</label>
+            <div class="input-wrapper" id="wrap-ast">
+                <input type="number" id="val-ast" placeholder="例如: 120" min="0" step="0.1">
+                <div class="error-msg" id="err-ast">请输入 AST 数值</div>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label>总胆红素 (TBil, μmol/L)</label>
+            <div class="input-wrapper" id="wrap-tbil">
+                <input type="number" id="val-tbil" placeholder="例如: 50" min="0" step="0.1">
+                <div class="error-msg" id="err-tbil">请输入 TBil 数值</div>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label>肌酐 (Cr, μmol/L)</label>
+            <div class="input-wrapper" id="wrap-cr">
+                <input type="number" id="val-cr" placeholder="例如: 150" min="0" step="0.1">
+                <div class="error-msg" id="err-cr">请输入 Cr 数值</div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-reset" onclick="resetForm()">重置</button>
+            <button class="btn btn-primary" onclick="calculateRisk()">智能评估 Sepsis 风险</button>
+        </div>
+
+        <div id="result-box">
+            <div class="prob-title">Sepsis 发生概率</div>
+            <div class="prob-value" id="prob-display">0.0%</div>
+            <div class="clinical-advice" id="advice-display"></div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        纯本地安全计算 | 不接触任何患者隐私数据<br>仅供临床科研与入组筛查参考
+    </div>
+</div>
+
+<script>
+    // 清除错误样式辅助函数
+    function clearErrors() {
+        const inputs = ['age', 'plt', 'ast', 'tbil', 'cr'];
+        inputs.forEach(id => {
+            document.getElementById('wrap-' + id).classList.remove('error');
+            document.getElementById('err-' + id).style.display = 'none';
+        });
+    }
+
+    // 重置表单
+    function resetForm() {
+        const inputs = ['age', 'plt', 'ast', 'tbil', 'cr'];
+        inputs.forEach(id => {
+            document.getElementById('val-' + id).value = '';
+        });
+        clearErrors();
+        document.getElementById('result-box').style.display = 'none';
+    }
+
+    // 核心计算逻辑
+    function calculateRisk() {
+        clearErrors();
+        let hasError = false;
+
+        // 1. 获取并校验数据
+        const data = {};
+        const inputs = ['age', 'plt', 'ast', 'tbil', 'cr'];
+        
+        inputs.forEach(id => {
+            let val = document.getElementById('val-' + id).value;
+            if (val === '' || isNaN(val) || val < 0) {
+                document.getElementById('wrap-' + id).classList.add('error');
+                document.getElementById('err-' + id).style.display = 'block';
+                hasError = true;
+            } else {
+                data[id] = parseFloat(val);
+            }
+        });
+
+        if (hasError) return; // 阻止计算，等待用户填完
+
+        // 2. 顶刊级底层模型公式 (严丝合缝对接 R 语言参数)
+        const Z = 0.922435 
+                + (0.029720 * data.age) 
+                - (0.047621 * data.plt) 
+                + (0.005563 * data.ast) 
+                + (0.098469 * data.tbil) 
+                + (0.012640 * data.cr);
+                
+        const P = 1 / (1 + Math.exp(-Z));
+        const probPercent = (P * 100).toFixed(1);
+
+        // 3. 动态渲染 UI
+        const resultBox = document.getElementById('result-box');
+        const probDisplay = document.getElementById('prob-display');
+        const adviceDisplay = document.getElementById('advice-display');
+
+        resultBox.style.display = 'block';
+        probDisplay.innerText = probPercent + '%';
+
+        // 4. 临床智能分诊逻辑
+        if (P > 0.80 && data.plt < 50) {
+            // 极危重：Phenotype 3 完美画像
+            resultBox.style.backgroundColor = '#ffeaa7';
+            resultBox.style.border = '2px solid #e17055';
+            probDisplay.style.color = '#d63031';
+            resultBox.style.color = '#d63031';
+            adviceDisplay.innerHTML = '🚨 极高危预警 (符合 Phenotype 3 特征)<br><br>【临床决策】<br>内皮崩解风险极高！强烈建议立即启动 PBMC 留取标本，并升级为重症监护！';
+        } 
+        else if (P > 0.50 || data.plt < 100) {
+            // 进展期：Phenotype 2 倾向
+            resultBox.style.backgroundColor = '#fab1a0';
+            resultBox.style.border = '2px solid #e17055';
+            probDisplay.style.color = '#2d3436';
+            resultBox.style.color = '#2d3436';
+            adviceDisplay.innerHTML = '⚠️ 中高危预警 (倾向 Phenotype 2/3)<br><br>【临床决策】<br>建议密切关注肝肾及凝血指标，可考虑留取 PBMC 作为对比队列样本。';
+        } 
+        else {
+            // 轻症代偿：Phenotype 1
+            resultBox.style.backgroundColor = '#55efc4';
+            resultBox.style.border = '2px solid #00b894';
+            probDisplay.style.color = '#2d3436';
+            resultBox.style.color = '#2d3436';
+            adviceDisplay.innerHTML = '✅ 低危评估 (符合 Phenotype 1 特征)<br><br>【临床决策】<br>病情相对稳定，常规抗感染对症治疗即可，暂不强制留取特异性标本。';
+        }
+    }
+</script>
+
+</body>
+</html>
