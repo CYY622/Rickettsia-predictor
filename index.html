@@ -38,7 +38,7 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 1.4rem; /* 稍微调整了英文字体的大小以保持美观 */
+            font-size: 1.4rem;
             letter-spacing: 1px;
         }
         .header p {
@@ -284,7 +284,7 @@
         resultBox.style.display = 'block';
         probDisplay.innerText = probPercent + '%';
 
-        // 核心临床分层逻辑
+        // 核心入组决策逻辑（已按最新修改方案精确定制）
         if (P >= 0.80) {
             resultBox.style.backgroundColor = '#ffeaa7';
             resultBox.style.border = '2px solid #e17055';
@@ -292,9 +292,9 @@
             resultBox.style.color = '#d63031';
             
             if (data.plt <= 50) {
-                adviceDisplay.innerHTML = '🚨 极高危预警 (典型 Phenotype 3 特征)<br><br>【临床决策】<br>Sepsis 风险极高，且伴随重度血小板消耗，内皮崩解风险极大！强烈建议立即启动 PBMC 留取标本，并升级为重症监护！';
+                adviceDisplay.innerHTML = '🚨 极高危预警 (典型 Phenotype 3 特征)<br><br>【入组决策】<br>Sepsis 风险极高，且伴随重度血小板消耗，符合内皮崩解极危重表型。<br><br>👉 <strong>强烈建议立即启动 PBMC 及血浆留样流程，锁定多组学核心研究对象！</strong>';
             } else {
-                adviceDisplay.innerHTML = '🚨 极高危预警 (多脏器受损驱动)<br><br>【临床决策】<br>虽然血小板尚未极度消耗，但综合脏器衰竭风险极高！强烈建议升级监护级别，密切追踪肝肾功能变化。';
+                adviceDisplay.innerHTML = '🚨 极高危预警 (多脏器受损驱动)<br><br>【入组决策】<br>综合脏器衰竭风险极高，虽非典型 Phenotype 3，但具有极高的科研价值。<br><br>👉 <strong>建议立即进行 PBMC留样，作为极危重组别的重要对照。</strong>';
             }
         } 
         else if (P >= 0.50 || data.plt <= 100) {
@@ -302,14 +302,14 @@
             resultBox.style.border = '2px solid #e17055';
             probDisplay.style.color = '#2d3436';
             resultBox.style.color = '#2d3436';
-            adviceDisplay.innerHTML = '⚠️ 中高危预警 (倾向 Phenotype 2 进展期)<br><br>【临床决策】<br>建议密切关注肝肾及凝血指标动态变化，可考虑留取 PBMC 作为对比队列样本。';
+            adviceDisplay.innerHTML = '⚠️ 中高危预警 (倾向 Phenotype 2 进展期)<br><br>【入组决策】<br>患者正处于脏器受损进展期或重度血小板消耗边缘。<br><br>👉 <strong>建议密切关注指标动态，可酌情留取 PBMC样本作为疾病演变过程的中间态队列样本。</strong>';
         } 
         else {
             resultBox.style.backgroundColor = '#55efc4';
             resultBox.style.border = '2px solid #00b894';
             probDisplay.style.color = '#2d3436';
             resultBox.style.color = '#2d3436';
-            adviceDisplay.innerHTML = '✅ 低危评估 (符合 Phenotype 1 特征)<br><br>【临床决策】<br>病情相对稳定，常规抗感染对症治疗即可，暂不留取特异性标本。';
+            adviceDisplay.innerHTML = '✅ 低危评估 (符合 Phenotype 1 特征)<br><br>【入组决策】<br>病情相对稳定，尚未出现重度多脏器受损趋势。<br><br>👉 <strong>暂不作为极危重机制研究的首选靶向对象，不强制要求留取特异性标本。</strong>';
         }
     }
 </script>
