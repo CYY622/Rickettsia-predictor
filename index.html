@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Severe rickettsia-predictor</title>
+    <title>立克次体病风险预测模型</title>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -38,7 +38,7 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 1.35rem; /* 调整为适合中文的大小 */
+            font-size: 1.35rem;
             letter-spacing: 1px;
         }
         .header p {
@@ -172,42 +172,42 @@
     
     <div class="form-body">
         <div class="input-group">
-            <label>年龄 (Age)</label>
+            <label>年龄</label>
             <div class="input-wrapper" id="wrap-age">
-                <input type="number" id="val-age" placeholder="输入患者年龄" min="0" step="1">
+                <input type="number" id="val-age" placeholder="请输入患者年龄" min="0" step="1">
                 <div class="error-msg" id="err-age">请输入有效的年龄</div>
             </div>
         </div>
         
         <div class="input-group">
-            <label>血小板 (PLT, ×10⁹/L)</label>
+            <label>血小板 (×10⁹/L)</label>
             <div class="input-wrapper" id="wrap-plt">
                 <input type="number" id="val-plt" placeholder="例如: 45" min="0" step="1">
-                <div class="error-msg" id="err-plt">请输入血小板数值</div>
+                <div class="error-msg" id="err-plt">请输入有效的血小板数值</div>
             </div>
         </div>
         
         <div class="input-group">
-            <label>谷草转氨酶 (AST, U/L)</label>
+            <label>谷草转氨酶 (U/L)</label>
             <div class="input-wrapper" id="wrap-ast">
                 <input type="number" id="val-ast" placeholder="例如: 120" min="0" step="0.1">
-                <div class="error-msg" id="err-ast">请输入 AST 数值</div>
+                <div class="error-msg" id="err-ast">请输入有效的谷草转氨酶数值</div>
             </div>
         </div>
         
         <div class="input-group">
-            <label>总胆红素 (TBil, μmol/L)</label>
+            <label>总胆红素 (μmol/L)</label>
             <div class="input-wrapper" id="wrap-tbil">
                 <input type="number" id="val-tbil" placeholder="例如: 50" min="0" step="0.1">
-                <div class="error-msg" id="err-tbil">请输入 TBil 数值</div>
+                <div class="error-msg" id="err-tbil">请输入有效的总胆红素数值</div>
             </div>
         </div>
         
         <div class="input-group">
-            <label>肌酐 (Cr, μmol/L)</label>
+            <label>肌酐 (μmol/L)</label>
             <div class="input-wrapper" id="wrap-cr">
                 <input type="number" id="val-cr" placeholder="例如: 150" min="0" step="0.1">
-                <div class="error-msg" id="err-cr">请输入 Cr 数值</div>
+                <div class="error-msg" id="err-cr">请输入有效的肌酐数值</div>
             </div>
         </div>
 
@@ -217,7 +217,7 @@
         </div>
 
         <div id="result-box">
-            <div class="prob-title">Sepsis 发生概率</div>
+            <div class="prob-title">脓毒血症发生概率</div>
             <div class="prob-value" id="prob-display">0.0%</div>
             <div class="clinical-advice" id="advice-display"></div>
         </div>
@@ -266,7 +266,7 @@
 
         if (hasError) return;
 
-        // 底层模型回归公式
+        // 底层回归模型数学公式 (代码内部变量不影响界面显示)
         const Z = 0.922435 
                 + (0.029720 * data.age) 
                 - (0.047621 * data.plt) 
@@ -284,7 +284,7 @@
         resultBox.style.display = 'block';
         probDisplay.innerText = probPercent + '%';
 
-        // 核心临床分层逻辑
+        // 核心临床分层与科研留样决策逻辑（全中文规范版）
         if (P >= 0.80) {
             resultBox.style.backgroundColor = '#ffeaa7';
             resultBox.style.border = '2px solid #e17055';
@@ -292,9 +292,9 @@
             resultBox.style.color = '#d63031';
             
             if (data.plt <= 50) {
-                adviceDisplay.innerHTML = '🚨 极高危预警 (典型 Phenotype 3 特征)<br><br>【入组决策】<br>Sepsis 风险极高，且伴随重度血小板消耗，符合内皮崩解极危重表型。<br><br>👉 <strong>强烈建议立即启动 PBMC 及血浆留样流程，锁定多组学核心研究对象！</strong>';
+                adviceDisplay.innerHTML = '🚨 极高危预警 (典型表型 3 特征)<br><br>【入组决策】<br>脓毒血症风险极高，且伴随重度血小板消耗，符合内皮崩解极危重表型。<br><br>👉 <strong>强烈建议立即启动 PBMC 及血浆留样流程，锁定多组学核心研究对象！</strong>';
             } else {
-                adviceDisplay.innerHTML = '🚨 极高危预警 (多脏器受损驱动)<br><br>【入组决策】<br>综合脏器衰竭风险极高，虽非典型 Phenotype 3，但具有极高的科研价值。<br><br>👉 <strong>建议立即进行 PBMC留样，作为极危重组别的重要对照。</strong>';
+                adviceDisplay.innerHTML = '🚨 极高危预警 (多脏器受损驱动)<br><br>【入组决策】<br>综合脏器衰竭风险极高，虽非典型表型 3，但具有极高的科研价值。<br><br>👉 <strong>建议立即进行 PBMC留样，作为极危重组别的重要对照。</strong>';
             }
         } 
         else if (P >= 0.50 || data.plt <= 100) {
@@ -302,14 +302,14 @@
             resultBox.style.border = '2px solid #e17055';
             probDisplay.style.color = '#2d3436';
             resultBox.style.color = '#2d3436';
-            adviceDisplay.innerHTML = '⚠️ 中高危预警 (倾向 Phenotype 2 进展期)<br><br>【入组决策】<br>患者正处于脏器受损进展期或重度血小板消耗边缘。<br><br>👉 <strong>建议密切关注指标动态，可酌情留取 PBMC样本作为疾病演变过程的中间态队列样本。</strong>';
+            adviceDisplay.innerHTML = '⚠️ 中高危预警 (倾向表型 2 进展期)<br><br>【入组决策】<br>患者正处于脏器受损进展期或重度血小板消耗边缘。<br><br>👉 <strong>建议密切关注指标动态，可酌情留取 PBMC样本作为疾病演变过程的中间态队列样本。</strong>';
         } 
         else {
             resultBox.style.backgroundColor = '#55efc4';
             resultBox.style.border = '2px solid #00b894';
             probDisplay.style.color = '#2d3436';
             resultBox.style.color = '#2d3436';
-            adviceDisplay.innerHTML = '✅ 低危评估 (符合 Phenotype 1 特征)<br><br>【入组决策】<br>病情相对稳定，尚未出现重度多脏器受损趋势。<br><br>👉 <strong>暂不作为极危重机制研究的首选靶向对象，不强制要求留取特异性标本。</strong>';
+            adviceDisplay.innerHTML = '✅ 低危评估 (符合 表型 1 特征)<br><br>【入组决策】<br>病情相对稳定，尚未出现重度多脏器受损趋势。<br><br>👉 <strong>暂不作为极危重机制研究的首选靶向对象，不强制要求留取特异性标本。</strong>';
         }
     }
 </script>
