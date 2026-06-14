@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>立克次体病风险预测模型 - 宜昌市中心人民医院</title>
+    <title>Severe rickettsia-predictor</title>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -38,7 +38,7 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 1.35rem;
+            font-size: 1.4rem; /* 稍微调整了英文字体的大小以保持美观 */
             letter-spacing: 1px;
         }
         .header p {
@@ -166,7 +166,7 @@
 
 <div class="app-container">
     <div class="header">
-        <h1>立克次体病风险预测模型</h1>
+        <h1>Severe rickettsia-predictor</h1>
         <p>宜昌市中心人民医院 V1.0</p>
     </div>
     
@@ -284,7 +284,7 @@
         resultBox.style.display = 'block';
         probDisplay.innerText = probPercent + '%';
 
-        // 核心临床分层逻辑（已修正）
+        // 核心临床分层逻辑
         if (P >= 0.80) {
             resultBox.style.backgroundColor = '#ffeaa7';
             resultBox.style.border = '2px solid #e17055';
