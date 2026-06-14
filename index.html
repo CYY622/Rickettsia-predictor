@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>立克次体感染 PBMC 靶向入组决策系统</title>
+    <title>立克次体病风险预测模型 - 宜昌市中心人民医院</title>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -38,13 +38,14 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             letter-spacing: 1px;
         }
         .header p {
-            margin: 5px 0 0 0;
-            font-size: 0.85rem;
-            opacity: 0.8;
+            margin: 8px 0 0 0;
+            font-size: 0.9rem;
+            opacity: 0.85;
+            font-weight: 300;
         }
         .form-body {
             padding: 25px 20px;
@@ -150,6 +151,7 @@
             font-size: 0.95rem;
             font-weight: 600;
             line-height: 1.5;
+            text-align: left;
         }
         .footer {
             text-align: center;
@@ -164,8 +166,8 @@
 
 <div class="app-container">
     <div class="header">
-        <h1>Sepsis 早期预警与靶向入组系统</h1>
-        <p>基于 1133 例真实世界多中心队列构建</p>
+        <h1>立克次体病风险预测模型</h1>
+        <p>宜昌市中心人民医院 V1.0</p>
     </div>
     
     <div class="form-body">
@@ -211,7 +213,7 @@
 
         <div class="btn-group">
             <button class="btn btn-reset" onclick="resetForm()">重置</button>
-            <button class="btn btn-primary" onclick="calculateRisk()">智能评估 Sepsis 风险</button>
+            <button class="btn btn-primary" onclick="calculateRisk()">风险评估</button>
         </div>
 
         <div id="result-box">
@@ -227,7 +229,6 @@
 </div>
 
 <script>
-    // 清除错误样式辅助函数
     function clearErrors() {
         const inputs = ['age', 'plt', 'ast', 'tbil', 'cr'];
         inputs.forEach(id => {
@@ -236,7 +237,6 @@
         });
     }
 
-    // 重置表单
     function resetForm() {
         const inputs = ['age', 'plt', 'ast', 'tbil', 'cr'];
         inputs.forEach(id => {
@@ -246,12 +246,10 @@
         document.getElementById('result-box').style.display = 'none';
     }
 
-    // 核心计算逻辑
     function calculateRisk() {
         clearErrors();
         let hasError = false;
 
-        // 1. 获取并校验数据
         const data = {};
         const inputs = ['age', 'plt', 'ast', 'tbil', 'cr'];
         
@@ -266,9 +264,9 @@
             }
         });
 
-        if (hasError) return; // 阻止计算，等待用户填完
+        if (hasError) return;
 
-        // 2. 顶刊级底层模型公式 (严丝合缝对接 R 语言参数)
+        // 底层模型回归公式
         const Z = 0.922435 
                 + (0.029720 * data.age) 
                 - (0.047621 * data.plt) 
@@ -279,7 +277,6 @@
         const P = 1 / (1 + Math.exp(-Z));
         const probPercent = (P * 100).toFixed(1);
 
-        // 3. 动态渲染 UI
         const resultBox = document.getElementById('result-box');
         const probDisplay = document.getElementById('prob-display');
         const adviceDisplay = document.getElementById('advice-display');
@@ -287,30 +284,32 @@
         resultBox.style.display = 'block';
         probDisplay.innerText = probPercent + '%';
 
-        // 4. 临床智能分诊逻辑
-        if (P > 0.80 && data.plt < 50) {
-            // 极危重：Phenotype 3 完美画像
+        // 核心临床分层逻辑（已修正）
+        if (P >= 0.80) {
             resultBox.style.backgroundColor = '#ffeaa7';
             resultBox.style.border = '2px solid #e17055';
             probDisplay.style.color = '#d63031';
             resultBox.style.color = '#d63031';
-            adviceDisplay.innerHTML = '🚨 极高危预警 (符合 Phenotype 3 特征)<br><br>【临床决策】<br>内皮崩解风险极高！强烈建议立即启动 PBMC 留取标本，并升级为重症监护！';
+            
+            if (data.plt <= 50) {
+                adviceDisplay.innerHTML = '🚨 极高危预警 (典型 Phenotype 3 特征)<br><br>【临床决策】<br>Sepsis 风险极高，且伴随重度血小板消耗，内皮崩解风险极大！强烈建议立即启动 PBMC 留取标本，并升级为重症监护！';
+            } else {
+                adviceDisplay.innerHTML = '🚨 极高危预警 (多脏器受损驱动)<br><br>【临床决策】<br>虽然血小板尚未极度消耗，但综合脏器衰竭风险极高！强烈建议升级监护级别，密切追踪肝肾功能变化。';
+            }
         } 
-        else if (P > 0.50 || data.plt < 100) {
-            // 进展期：Phenotype 2 倾向
+        else if (P >= 0.50 || data.plt <= 100) {
             resultBox.style.backgroundColor = '#fab1a0';
             resultBox.style.border = '2px solid #e17055';
             probDisplay.style.color = '#2d3436';
             resultBox.style.color = '#2d3436';
-            adviceDisplay.innerHTML = '⚠️ 中高危预警 (倾向 Phenotype 2/3)<br><br>【临床决策】<br>建议密切关注肝肾及凝血指标，可考虑留取 PBMC 作为对比队列样本。';
+            adviceDisplay.innerHTML = '⚠️ 中高危预警 (倾向 Phenotype 2 进展期)<br><br>【临床决策】<br>建议密切关注肝肾及凝血指标动态变化，可考虑留取 PBMC 作为对比队列样本。';
         } 
         else {
-            // 轻症代偿：Phenotype 1
             resultBox.style.backgroundColor = '#55efc4';
             resultBox.style.border = '2px solid #00b894';
             probDisplay.style.color = '#2d3436';
             resultBox.style.color = '#2d3436';
-            adviceDisplay.innerHTML = '✅ 低危评估 (符合 Phenotype 1 特征)<br><br>【临床决策】<br>病情相对稳定，常规抗感染对症治疗即可，暂不强制留取特异性标本。';
+            adviceDisplay.innerHTML = '✅ 低危评估 (符合 Phenotype 1 特征)<br><br>【临床决策】<br>病情相对稳定，常规抗感染对症治疗即可，暂不留取特异性标本。';
         }
     }
 </script>
