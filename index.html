@@ -13,13 +13,14 @@
             --red-tint: rgba(220, 38, 38, 0.06);
             --red-border: #fca5a5;
             --red-text: #b91c1c;
+            --red-badge-bg: #fee2e2;
+            --blue-badge-bg: #dbeafe;
+            --blue-badge-text: #1d4ed8;
             --amber-bg: #fffbeb;
             --amber-border: #fcd34d;
             --amber-text: #92400e;
             --green-bg: #f0fdf4;
             --green-text: #15803d;
-            --slate-bg: #f1f5f9;
-            --slate-text: #334155;
             --bg-page: #f4f6f9;
             --card-bg: #ffffff;
             --border: #dde3ea;
@@ -64,8 +65,8 @@
         }
 
         .hero-sub {
-            margin: 4px 0 8px;
-            font-size: 0.84rem;
+            margin: 6px 0 8px;
+            font-size: 0.88rem;
             color: var(--text-muted);
         }
 
@@ -277,23 +278,48 @@
         .tip-stack {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 5px;
         }
 
-        .tip-ref {
+        .tip-high {
             display: inline-block;
-            padding: 2px 7px;
+            padding: 2px 8px;
             border-radius: 4px;
-            font-size: 0.76rem;
-            background: var(--slate-bg);
-            color: var(--slate-text);
+            font-size: 0.78rem;
+            font-weight: 600;
+            background: var(--red-badge-bg);
+            color: var(--red-text);
+            border: 1px solid #fca5a5;
+        }
+
+        .tip-low {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            background: var(--blue-badge-bg);
+            color: var(--blue-badge-text);
+            border: 1px solid #93c5fd;
+        }
+
+        .tip-normal {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            background: var(--green-bg);
+            color: var(--green-text);
+            border: 1px solid #86efac;
         }
 
         .tip-range {
             display: inline-block;
-            padding: 2px 7px;
+            padding: 2px 8px;
             border-radius: 4px;
-            font-size: 0.76rem;
+            font-size: 0.78rem;
+            font-weight: 600;
             background: var(--amber-bg);
             border: 1px solid var(--amber-border);
             color: var(--amber-text);
@@ -356,8 +382,8 @@
 <div class="page-shell">
     <div class="hero-box">
         <h1>立克次体病脓毒症风险评估</h1>
-        <div class="hero-sub">Clinical Risk Prediction &amp; Phenotype Classification</div>
-        <span class="badge badge-info">Research Tool</span>
+        <div class="hero-sub">住院期间脓毒症预测概率与临床风险表型辅助识别</div>
+        <span class="badge badge-info">临床科研辅助工具</span>
     </div>
 
     <div class="divider"></div>
@@ -367,32 +393,32 @@
         <div class="mod-title">核心指标输入（6项指标）</div>
         <div class="input-grid">
             <div class="field" id="field-plt">
-                <label for="in-plt">血小板 PLT (×10⁹/L)</label>
+                <label for="in-plt">血小板 (×10⁹/L)</label>
                 <input type="number" id="in-plt" placeholder="例如 45" min="0" step="0.1">
                 <div class="field-err" id="err-plt">请输入有效的非负数值</div>
             </div>
             <div class="field" id="field-alb">
-                <label for="in-alb">白蛋白 Alb (g/L)</label>
+                <label for="in-alb">白蛋白 (g/L)</label>
                 <input type="number" id="in-alb" placeholder="例如 32.0" min="0" step="0.1">
                 <div class="field-err" id="err-alb">请输入有效的非负数值</div>
             </div>
             <div class="field" id="field-cr">
-                <label for="in-cr">肌酐 Cr (μmol/L)</label>
+                <label for="in-cr">肌酐 (μmol/L)</label>
                 <input type="number" id="in-cr" placeholder="例如 150" min="0" step="0.1">
                 <div class="field-err" id="err-cr">请输入有效的非负数值</div>
             </div>
             <div class="field" id="field-pct">
-                <label for="in-pct">降钙素原 PCT (ng/mL)</label>
+                <label for="in-pct">降钙素原 (ng/mL)</label>
                 <input type="number" id="in-pct" placeholder="例如 2.5" min="0" step="0.01">
                 <div class="field-err" id="err-pct">请输入有效的非负数值</div>
             </div>
             <div class="field" id="field-urea">
-                <label for="in-urea">尿素 Urea (mmol/L)</label>
+                <label for="in-urea">尿素 (mmol/L)</label>
                 <input type="number" id="in-urea" placeholder="例如 8.5" min="0" step="0.1">
                 <div class="field-err" id="err-urea">请输入有效的非负数值</div>
             </div>
             <div class="field" id="field-tbil">
-                <label for="in-tbil">总胆红素 TBil (μmol/L)</label>
+                <label for="in-tbil">总胆红素 (μmol/L)</label>
                 <input type="number" id="in-tbil" placeholder="例如 50" min="0" step="0.1">
                 <div class="field-err" id="err-tbil">请输入有效的非负数值</div>
             </div>
@@ -411,7 +437,7 @@
         <div class="prob-card">
             <div class="prob-label">住院期间脓毒症预测概率</div>
             <div class="prob-num" id="out-prob">0.0%</div>
-            <div class="model-tag">Logistic Regression（训练集 ROC 统计界值：0.497）</div>
+            <div class="model-tag">多因素逻辑回归模型（训练集最佳统计界值：0.497）</div>
         </div>
         <p class="caption-note">模型统计学风险估计，不等同于临床确诊结果。</p>
 
@@ -455,74 +481,13 @@
 
         <div class="divider"></div>
 
-        <!-- 04 · 研究队列表型特征 -->
-        <div class="mod-title">04 · 研究队列表型特征</div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>临床表型</th>
-                        <th>例数 (n)</th>
-                        <th>核心指标均值（PLT / Alb / Cr / PCT / Urea / TBil）</th>
-                        <th>Sepsis 发生率</th>
-                        <th>AKI 发生率</th>
-                        <th>ICU 发生率</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Phenotype 1</strong></td>
-                        <td>366</td>
-                        <td>PLT 140.7 · Alb 35.1 · Cr 75.9 · PCT 1.3 · Urea 5.6 · TBil 12.7</td>
-                        <td>42.1% (154/366)</td>
-                        <td>3.6% (13/366)</td>
-                        <td>0.8% (3/366)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Phenotype 2</strong></td>
-                        <td>414</td>
-                        <td>PLT 126.2 · Alb 31.7 · Cr 88.4 · PCT 2.3 · Urea 6.7 · TBil 14.4</td>
-                        <td>58.9% (244/414)</td>
-                        <td>3.9% (16/414)</td>
-                        <td>5.3% (22/414)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Phenotype 3</strong></td>
-                        <td>38</td>
-                        <td>PLT 72.1 · Alb 26.8 · Cr 291.2 · PCT 9.3 · Urea 30.3 · TBil 46.0</td>
-                        <td>92.1% (35/38)</td>
-                        <td>28.9% (11/38)</td>
-                        <td>55.3% (21/38)</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p class="caption-note">
-            注：上表为训练集（本院 2019–2024 年，n = 818）各表型群体统计对照，与当前单个患者输入值分开呈现。
-        </p>
-
-        <div class="divider"></div>
-
-        <!-- 05 · 模型参数与算法口径说明 -->
-        <div class="mod-title">05 · 模型参数与算法口径说明</div>
+        <!-- 04 · 模型信息与使用限制 -->
+        <div class="mod-title">04 · 模型信息与使用限制</div>
         <div class="info-box">
             <ul>
-                <li><strong>变量转换方法</strong>：对偏态指标 <code>Cr</code>、<code>PCT</code>、<code>Urea</code>、<code>TBil</code> 执行 $\log_{10}(x + 1)$ 转换；<code>PLT</code> 与 <code>Alb</code> 保留原始数值。</li>
-                <li><strong>标准化与聚类中心</strong>：使用训练集对应变量均值与标准差进行 Z-score 标准化，再计算与 <code>Phenotype 1 / 2 / 3</code> 三个聚类中心的欧氏距离并归入最近簇。</li>
-                <li><strong>Logistic 回归公式</strong>：$Z = \beta_0 + \sum_{i=1}^{6}\beta_i X_i$，$P = \frac{1}{1 + e^{-Z}}$，使用训练集拟合的截距与 6 项回归系数。</li>
-            </ul>
-            <pre class="mono-block" id="out-param-summary"></pre>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- 06 · 模型信息与使用限制 -->
-        <div class="mod-title">06 · 模型信息与使用限制</div>
-        <div class="info-box">
-            <ul>
-                <li><strong>研究队列与时间跨度</strong>：基于立克次体病临床队列构建，训练集为本院 2019–2024 年病例（n = 818），全队列含插补后 24h 内数据（n = 1,131）。</li>
-                <li><strong>预测时间口径</strong>：当前输出为“住院期间脓毒血症预测概率”。若未剔除基线/早期已发生脓毒症患者或未限定为预测起点后新发病例，不应直接解释为“未来新发脓毒症发生风险”。</li>
-                <li><strong>使用限制</strong>：本工具仅用于临床科研与教学辅助评估，不能替代临床诊断、病情判断或医师决策。</li>
+                <li><strong>研究队列与时间跨度</strong>：基于立克次体病临床队列构建，训练集为本院 2019–2024 年病例，全队列含插补后 24 小时内数据。</li>
+                <li><strong>预测时间口径</strong>：当前输出为“住院期间脓毒症预测概率”。若未剔除基线或早期已发生脓毒症患者，或未限定为预测起点后新发病例，不应直接解释为“未来新发脓毒症发生风险”。</li>
+                <li><strong>使用限制</strong>：本工具仅用于临床科研与教学辅助评估，不能替代临床诊断、病情判断或医师决策，应结合症状、体征及动态检查综合评估。</li>
             </ul>
         </div>
 
@@ -549,12 +514,12 @@
             tbil: 0.16399747
         },
         trainRange: {
-            plt:  { min: 0.60, max: 865.00 },
+            plt:  { min: 0.60,  max: 865.00 },
             alb:  { min: 17.58, max: 135.30 },
-            cr:   { min: 3.42, max: 1122.00 },
-            pct:  { min: 0.02, max: 154.66 },
-            urea: { min: 0.85, max: 385.00 },
-            tbil: { min: 3.18, max: 168.23 }
+            cr:   { min: 3.42,  max: 1122.00 },
+            pct:  { min: 0.02,  max: 154.66 },
+            urea: { min: 0.85,  max: 385.00 },
+            tbil: { min: 3.18,  max: 168.23 }
         },
         trainScale: {
             plt:  { mean: 130.15110024, sd: 100.11114193 },
@@ -577,23 +542,13 @@
     };
 
     const META = [
-        { key: "plt",  label: "血小板 PLT",    unit: "×10⁹/L", refLow: 125,  refHigh: 350,   refText: "125–350 ×10⁹/L" },
-        { key: "alb",  label: "白蛋白 Alb",    unit: "g/L",    refLow: 40.0, refHigh: 55.0,  refText: "40.0–55.0 g/L" },
-        { key: "cr",   label: "肌酐 Cr",       unit: "μmol/L", refLow: 44.0, refHigh: 133.0, refText: "44.0–133.0 μmol/L" },
-        { key: "pct",  label: "降钙素原 PCT",  unit: "ng/mL",  refLow: null, refHigh: 0.05,  refText: "< 0.05 ng/mL" },
-        { key: "urea", label: "尿素 Urea",     unit: "mmol/L", refLow: 2.9,  refHigh: 8.2,   refText: "2.9–8.2 mmol/L" },
-        { key: "tbil", label: "总胆红素 TBil", unit: "μmol/L", refLow: 3.4,  refHigh: 20.5,  refText: "3.4–20.5 μmol/L" }
+        { key: "plt",  label: "血小板",   unit: "×10⁹/L", refLow: 125,  refHigh: 350,   refText: "125–350 ×10⁹/L" },
+        { key: "alb",  label: "白蛋白",   unit: "g/L",    refLow: 40.0, refHigh: 55.0,  refText: "40.0–55.0 g/L" },
+        { key: "cr",   label: "肌酐",     unit: "μmol/L", refLow: 44.0, refHigh: 133.0, refText: "44.0–133.0 μmol/L" },
+        { key: "pct",  label: "降钙素原", unit: "ng/mL",  refLow: null, refHigh: 0.05,  refText: "< 0.05 ng/mL" },
+        { key: "urea", label: "尿素",     unit: "mmol/L", refLow: 2.9,  refHigh: 8.2,   refText: "2.9–8.2 mmol/L" },
+        { key: "tbil", label: "总胆红素", unit: "μmol/L", refLow: 3.4,  refHigh: 20.5,  refText: "3.4–20.5 μmol/L" }
     ];
-
-    function renderParamSummary() {
-        document.getElementById("out-param-summary").textContent = JSON.stringify({
-            intercept: CONFIG.intercept,
-            coefficients: CONFIG.coef,
-            log10_plus_1_vars: LOG_VARS,
-            train_scale: CONFIG.trainScale,
-            cluster_centers: CONFIG.centers
-        }, null, 2);
-    }
 
     function clearAll() {
         VARS.forEach((k) => {
@@ -604,16 +559,20 @@
         document.getElementById("result-section").style.display = "none";
     }
 
-    function getRefHint(val, m) {
-        if (m.refLow !== null && val < m.refLow) return "临床参考范围提示：低于常规参考范围下限";
-        if (m.refHigh !== null && val > m.refHigh) return "临床参考范围提示：高于常规参考范围上限";
-        return "临床参考范围提示：在常规参考范围内";
+    function getRefHintObj(val, m) {
+        if (m.refLow !== null && val < m.refLow) {
+            return { text: "临床参考范围提示：低于参考范围", cls: "tip-low" };
+        }
+        if (m.refHigh !== null && val > m.refHigh) {
+            return { text: "临床参考范围提示：高于参考范围", cls: "tip-high" };
+        }
+        return { text: "临床参考范围提示：处于参考范围", cls: "tip-normal" };
     }
 
     function getTrainRangeHint(val, k) {
         const r = CONFIG.trainRange[k];
         if (val < r.min || val > r.max) {
-            return `模型输入范围提示：超出训练集范围 [${r.min}, ${r.max}]，预测存在外推不确定性`;
+            return `模型输入范围提示：超出训练集范围 [${r.min}, ${r.max}]，预测结果可能存在不确定性`;
         }
         return null;
     }
@@ -696,7 +655,7 @@
         META.forEach((m) => {
             const val = rawData[m.key];
             const trRange = CONFIG.trainRange[m.key];
-            const refTip = getRefHint(val, m);
+            const refHint = getRefHintObj(val, m);
             const rangeTip = getTrainRangeHint(val, m.key);
 
             const tr = document.createElement("tr");
@@ -705,7 +664,7 @@
                 `<td>${val}</td>` +
                 `<td>${m.unit}</td>` +
                 `<td>参考：${m.refText}<br><span style="color:var(--text-muted);font-size:0.78rem;">训练集：[${trRange.min}, ${trRange.max}]</span></td>` +
-                `<td><div class="tip-stack"><span class="tip-ref">${refTip}</span>${rangeTip ? `<span class="tip-range">${rangeTip}</span>` : ""}</div></td>`;
+                `<td><div class="tip-stack"><span class="${refHint.cls}">${refHint.text}</span>${rangeTip ? `<span class="tip-range">${rangeTip}</span>` : ""}</div></td>`;
             tbody.appendChild(tr);
         });
 
@@ -726,14 +685,12 @@
 
         document.getElementById("out-trace-content").innerHTML =
             `<div><strong>1. 六项指标实际输入值</strong><pre class="mono-block">${JSON.stringify(rawData, null, 2)}</pre></div>` +
-            `<div><strong>2. 对数转换后的四项指标（log10(x + 1)）</strong><pre class="mono-block">${JSON.stringify(logOnly, null, 2)}</pre></div>` +
-            `<div><strong>3. 六项指标标准化后的 Z-score</strong><pre class="mono-block">${JSON.stringify(zRounded, null, 2)}</pre></div>` +
+            `<div><strong>2. 对数转换后的四项指标（对数底数10加1转换）</strong><pre class="mono-block">${JSON.stringify(logOnly, null, 2)}</pre></div>` +
+            `<div><strong>3. 六项指标标准化后的标准化分值</strong><pre class="mono-block">${JSON.stringify(zRounded, null, 2)}</pre></div>` +
             `<div><strong>4. 到三个聚类中心的欧氏距离</strong><pre class="mono-block">${JSON.stringify(distRounded, null, 2)}</pre></div>` +
-            `<div><strong>5. 最终 Phenotype 归属</strong><pre class="mono-block">${res.nearestPheno}</pre></div>` +
-            `<div><strong>6. Logistic 回归线性预测值及最终概率</strong><pre class="mono-block">线性预测值 Z = ${res.linearPredictor.toFixed(6)}\n预测概率 P   = ${res.prob.toFixed(6)} (${(res.prob * 100).toFixed(1)}%)</pre></div>`;
+            `<div><strong>5. 最终表型归属</strong><pre class="mono-block">${res.nearestPheno}</pre></div>` +
+            `<div><strong>6. 逻辑回归线性预测值及最终概率</strong><pre class="mono-block">线性预测值 = ${res.linearPredictor.toFixed(6)}\n预测概率   = ${res.prob.toFixed(6)} (${(res.prob * 100).toFixed(1)}%)</pre></div>`;
     }
-
-    renderParamSummary();
 </script>
 </body>
 </html>
