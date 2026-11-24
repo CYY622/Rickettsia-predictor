@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>立克次体病脓毒症风险评估</title>
+    <title>立克次体病住院期间脓毒症风险与临床表型评估</title>
     <style>
         :root {
             --primary: #1e3a5f;
             --primary-soft: #eef4fa;
-            --blue-accent: #3185d8;
-            --blue-tint: rgba(59, 130, 246, 0.08);
+            --blue-accent: #2877b8;
+            --blue-tint: rgba(40, 119, 184, 0.08);
             --red-tint: rgba(220, 38, 38, 0.06);
             --red-border: #fca5a5;
             --red-text: #b91c1c;
@@ -43,7 +43,7 @@
         }
 
         .page-shell {
-            max-width: 980px;
+            max-width: 1000px;
             margin: 0 auto;
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -54,20 +54,21 @@
 
         .hero-box {
             text-align: center;
-            padding-bottom: 18px;
+            padding-bottom: 16px;
         }
 
         .hero-box h1 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.45rem;
             font-weight: 700;
             color: var(--primary);
         }
 
         .hero-sub {
-            margin: 6px 0 8px;
-            font-size: 0.88rem;
-            color: var(--text-muted);
+            margin: 8px auto 10px;
+            max-width: 720px;
+            font-size: 0.9rem;
+            color: var(--text-sub);
         }
 
         .badge {
@@ -84,7 +85,7 @@
         }
 
         .badge-danger {
-            background: #fee2e2;
+            background: var(--red-badge-bg);
             color: var(--red-text);
         }
 
@@ -120,20 +121,36 @@
 
         .input-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
             gap: 14px;
         }
 
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
         .field label {
-            display: block;
             font-size: 0.88rem;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .req-mark {
+            color: var(--red-text);
+            margin-left: 2px;
+        }
+
+        .unit-tag {
+            color: var(--primary);
+            font-weight: 700;
+            margin-left: 4px;
         }
 
         .field input {
             width: 100%;
-            padding: 9px 12px;
+            padding: 10px 12px;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
             font-size: 0.94rem;
@@ -143,7 +160,7 @@
         .field input:focus {
             outline: none;
             border-color: var(--blue-accent);
-            box-shadow: 0 0 0 3px rgba(49, 133, 216, 0.15);
+            box-shadow: 0 0 0 3px rgba(40, 119, 184, 0.14);
         }
 
         .field.invalid input {
@@ -158,11 +175,32 @@
             margin-top: 4px;
         }
 
+        .field-extreme {
+            display: none;
+            color: var(--amber-text);
+            background: var(--amber-bg);
+            border: 1px solid var(--amber-border);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.78rem;
+            margin-top: 5px;
+        }
+
+        .input-foot-note {
+            margin-top: 14px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            font-size: 0.82rem;
+            color: var(--text-sub);
+        }
+
         .action-row {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
-            margin-top: 16px;
+            margin-top: 14px;
         }
 
         .btn {
@@ -180,6 +218,10 @@
             border-color: #cbd5e1;
         }
 
+        .btn-ghost:hover {
+            background: #f8fafc;
+        }
+
         .btn-main {
             background: var(--primary);
             color: #ffffff;
@@ -193,17 +235,27 @@
             display: none;
         }
 
+        .core-two-col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+            align-items: stretch;
+        }
+
         .prob-card {
             background: var(--blue-tint);
             border: 1px solid #bfdbfe;
             border-radius: 12px;
             padding: 20px;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .prob-label {
-            font-size: 0.88rem;
-            color: var(--text-sub);
+        .prob-top-label {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--primary);
         }
 
         .prob-num {
@@ -211,12 +263,56 @@
             font-weight: 800;
             color: var(--blue-accent);
             line-height: 1.15;
-            margin: 6px 0;
+            margin: 10px 0 12px;
         }
 
-        .model-tag {
-            font-size: 0.78rem;
-            color: var(--text-muted);
+        .prob-layers {
+            font-size: 0.85rem;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .pheno-card {
+            background: var(--red-tint);
+            border: 1px solid var(--red-border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .pheno-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .pheno-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .pheno-details {
+            font-size: 0.84rem;
+            color: var(--text-sub);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .dist-box {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.82rem;
+            color: var(--text-main);
         }
 
         .caption-note {
@@ -225,25 +321,16 @@
             color: var(--text-muted);
         }
 
-        .pheno-card {
-            background: var(--red-tint);
-            border: 1px solid var(--red-border);
+        .chart-card {
+            border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 18px;
+            padding: 16px 18px;
+            background: #fcfcfd;
         }
 
-        .pheno-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-
-        .pheno-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-main);
+        .svg-wrap {
+            width: 100%;
+            overflow-x: auto;
         }
 
         .table-wrap {
@@ -325,44 +412,46 @@
             color: var(--amber-text);
         }
 
-        .info-box {
+        .bottom-collapses {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        details.collapse-card {
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 16px 18px;
-            background: #fcfcfd;
-            font-size: 0.86rem;
-            color: var(--text-sub);
-        }
-
-        .info-box ul {
-            margin: 6px 0;
-            padding-left: 20px;
-        }
-
-        .info-box li {
-            margin-bottom: 5px;
-        }
-
-        details.trace-box {
-            margin-top: 18px;
-            border: 1px solid #cbd5e1;
-            border-radius: 12px;
             background: #f8fafc;
-            padding: 14px 18px;
+            padding: 12px 16px;
         }
 
-        details.trace-box summary {
+        details.collapse-card summary {
             cursor: pointer;
             font-weight: 700;
             color: var(--primary);
-            font-size: 0.95rem;
+            font-size: 0.94rem;
         }
 
-        .trace-content {
-            margin-top: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
+        .collapse-body {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+
+        .collapse-body h4 {
+            margin: 12px 0 6px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .collapse-body ul {
+            margin: 4px 0 8px;
+            padding-left: 20px;
+        }
+
+        .collapse-body li {
+            margin-bottom: 4px;
         }
 
         pre.mono-block {
@@ -376,91 +465,133 @@
             overflow-x: auto;
             color: #0f172a;
         }
+
+        .trace-content {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
     </style>
 </head>
 <body>
 <div class="page-shell">
+    <!-- 1. 首页标题和副标题 -->
     <div class="hero-box">
-        <h1>立克次体病脓毒症风险评估</h1>
-        <div class="hero-sub">住院期间脓毒症预测概率与临床风险表型辅助识别</div>
-        <span class="badge badge-info">临床科研辅助工具</span>
+        <h1>立克次体病住院期间脓毒症风险与临床表型评估</h1>
+        <div class="hero-sub">基于六项常规实验室指标的脓毒症风险预测与临床表型识别研究工具</div>
+        <span class="badge badge-info">临床科研工具 · 非临床诊断系统</span>
     </div>
 
     <div class="divider"></div>
 
-    <!-- 指标录入区 -->
+    <!-- 2. 六项指标输入区域 -->
     <div class="input-panel">
-        <div class="mod-title">核心指标输入（6项指标）</div>
+        <div class="mod-title">六项常规实验室指标输入</div>
         <div class="input-grid">
             <div class="field" id="field-plt">
-                <label for="in-plt">血小板 (×10⁹/L)</label>
-                <input type="number" id="in-plt" placeholder="例如 45" min="0" step="0.1">
-                <div class="field-err" id="err-plt">请输入有效的非负数值</div>
+                <label for="in-plt">血小板 PLT<span class="req-mark">*</span><span class="unit-tag">(×10⁹/L)</span></label>
+                <input type="number" id="in-plt" placeholder="例如：110（必填）" min="0" step="0.1" required>
+                <div class="field-err" id="err-plt">必填项：请输入有效的非负数值</div>
+                <div class="field-extreme" id="ext-plt">极值提醒：PLT &gt; 1000 ×10⁹/L，请核对单位或录入值。</div>
             </div>
             <div class="field" id="field-alb">
-                <label for="in-alb">白蛋白 (g/L)</label>
-                <input type="number" id="in-alb" placeholder="例如 32.0" min="0" step="0.1">
-                <div class="field-err" id="err-alb">请输入有效的非负数值</div>
+                <label for="in-alb">白蛋白 Alb<span class="req-mark">*</span><span class="unit-tag">(g/L)</span></label>
+                <input type="number" id="in-alb" placeholder="例如：33.0（必填）" min="0" step="0.1" required>
+                <div class="field-err" id="err-alb">必填项：请输入有效的非负数值</div>
+                <div class="field-extreme" id="ext-alb">极值提醒：Alb &lt; 10 或 &gt; 70 g/L，请核对单位或录入值。</div>
             </div>
             <div class="field" id="field-cr">
-                <label for="in-cr">肌酐 (μmol/L)</label>
-                <input type="number" id="in-cr" placeholder="例如 150" min="0" step="0.1">
-                <div class="field-err" id="err-cr">请输入有效的非负数值</div>
+                <label for="in-cr">肌酐 Cr<span class="req-mark">*</span><span class="unit-tag">(μmol/L)</span></label>
+                <input type="number" id="in-cr" placeholder="例如：85.0（必填）" min="0" step="0.1" required>
+                <div class="field-err" id="err-cr">必填项：请输入有效的非负数值</div>
+                <div class="field-extreme" id="ext-cr">极值提醒：Cr &gt; 1500 μmol/L，请核对单位或录入值。</div>
             </div>
             <div class="field" id="field-pct">
-                <label for="in-pct">降钙素原 (ng/mL)</label>
-                <input type="number" id="in-pct" placeholder="例如 2.5" min="0" step="0.01">
-                <div class="field-err" id="err-pct">请输入有效的非负数值</div>
+                <label for="in-pct">降钙素原 PCT<span class="req-mark">*</span><span class="unit-tag">(ng/mL)</span></label>
+                <input type="number" id="in-pct" placeholder="例如：0.85（必填）" min="0" step="0.01" required>
+                <div class="field-err" id="err-pct">必填项：请输入有效的非负数值</div>
+                <div class="field-extreme" id="ext-pct">极值提醒：PCT &gt; 200 ng/mL，请核对单位或录入值。</div>
             </div>
             <div class="field" id="field-urea">
-                <label for="in-urea">尿素 (mmol/L)</label>
-                <input type="number" id="in-urea" placeholder="例如 8.5" min="0" step="0.1">
-                <div class="field-err" id="err-urea">请输入有效的非负数值</div>
+                <label for="in-urea">尿素 Urea<span class="req-mark">*</span><span class="unit-tag">(mmol/L)</span></label>
+                <input type="number" id="in-urea" placeholder="例如：6.2（必填）" min="0" step="0.1" required>
+                <div class="field-err" id="err-urea">必填项：请输入有效的非负数值</div>
+                <div class="field-extreme" id="ext-urea">极值提醒：Urea &gt; 80 mmol/L，请核对单位或录入值。</div>
             </div>
             <div class="field" id="field-tbil">
-                <label for="in-tbil">总胆红素 (μmol/L)</label>
-                <input type="number" id="in-tbil" placeholder="例如 50" min="0" step="0.1">
-                <div class="field-err" id="err-tbil">请输入有效的非负数值</div>
+                <label for="in-tbil">总胆红素 TBil<span class="req-mark">*</span><span class="unit-tag">(μmol/L)</span></label>
+                <input type="number" id="in-tbil" placeholder="例如：15.0（必填）" min="0" step="0.1" required>
+                <div class="field-err" id="err-tbil">必填项：请输入有效的非负数值</div>
+                <div class="field-extreme" id="ext-tbil">极值提醒：TBil &gt; 600 μmol/L，请核对单位或录入值。</div>
             </div>
         </div>
+
+        <div class="input-foot-note">
+            请确保所有指标采用模型训练时一致的单位及检测口径。极端数值将触发核对提示，但不会自动阻断模型计算。
+        </div>
+
         <div class="action-row">
-            <button type="button" class="btn btn-ghost" onclick="clearAll()">重置</button>
-            <button type="button" class="btn btn-main" onclick="runEvaluation()">开始评估</button>
+            <button type="button" class="btn btn-ghost" onclick="clearAll()">清空重置</button>
+            <button type="button" class="btn btn-main" onclick="runEvaluation()">执行评估</button>
         </div>
     </div>
 
+    <!-- 结果区域 -->
     <div id="result-section">
         <div class="divider"></div>
 
-        <!-- 01 · 风险预测结果 -->
-        <div class="mod-title">01 · 风险预测结果</div>
-        <div class="prob-card">
-            <div class="prob-label">住院期间脓毒症预测概率</div>
-            <div class="prob-num" id="out-prob">0.0%</div>
-            <div class="model-tag">多因素逻辑回归模型（训练集最佳统计界值：0.497）</div>
+        <!-- 6. 结果卡片视觉层级（两大核心结果并排） + 3 & 4 精细打磨 -->
+        <div class="core-two-col">
+            <!-- 3. 预测概率结果卡片 -->
+            <div class="prob-card">
+                <div>
+                    <div class="prob-top-label">住院期间脓毒症预测概率</div>
+                    <div class="prob-num" id="out-prob">0.0%</div>
+                </div>
+                <div class="prob-layers">
+                    <div><strong>1. 最终预测概率：</strong><span id="out-prob-line">0.0%</span></div>
+                    <div><strong>2. 模型：</strong>Logistic Regression（训练集 ROC 最佳统计界值 0.497 源于训练集 ROC 分析，非临床诊断界值）</div>
+                    <div><strong>3. 解释：</strong>统计学风险估计，不等同于临床确诊。</div>
+                </div>
+            </div>
+
+            <!-- 4. Phenotype 临床表型结果 -->
+            <div class="pheno-card">
+                <div>
+                    <div class="pheno-head">
+                        <span class="pheno-name" id="out-pheno-title">当前所属：Phenotype 1</span>
+                        <span class="badge badge-info" id="out-pheno-badge">表型归属</span>
+                    </div>
+                    <div class="pheno-details">
+                        <div class="dist-box" id="out-pheno-dists"></div>
+                        <div id="out-pheno-reason"></div>
+                        <div id="out-pheno-order">
+                            <strong>表型编号规则：</strong>按各聚类对应人群血小板（PLT）均值降序排列为 Phenotype 1、Phenotype 2、Phenotype 3。
+                        </div>
+                    </div>
+                </div>
+                <p class="caption-note" style="color: var(--text-sub); margin-top: 10px;">
+                    临床表型代表患者多维实验室指标在无监督聚类空间中的相似性归属，不等同于疾病诊断或临床严重程度分级。
+                </p>
+            </div>
         </div>
-        <p class="caption-note">模型统计学风险估计，不等同于临床确诊结果。</p>
 
         <div class="divider"></div>
 
-        <!-- 02 · 临床表型识别 -->
-        <div class="mod-title">02 · 临床表型识别</div>
-        <div class="pheno-card" id="pheno-card">
-            <div class="pheno-top">
-                <span class="pheno-name" id="out-pheno">Phenotype 1</span>
-                <span class="badge badge-info" id="out-pheno-badge">表型归属</span>
-            </div>
-            <div><strong>多维实验室指标异常特征组合</strong></div>
-            <p class="caption-note" style="color: var(--text-sub); margin-top: 4px;" id="out-pheno-desc">
-                根据标准化后的六项指标与训练集聚类中心的距离，识别患者所属临床表型。
+        <!-- 7. 六项指标标准化值可视化 -->
+        <div class="chart-card">
+            <div class="mod-title">六项指标标准化值分布（Z-score，聚类空间）</div>
+            <div class="svg-wrap" id="out-zscore-chart"></div>
+            <p class="caption-note">
+                统计量说明：展示当前患者六项指标经相应变换后按训练集均值与标准差计算的 Z-score（无量纲），0 表示训练集均值水平。
             </p>
         </div>
-        <p class="caption-note">表型归属反映指标组合相似性，不构成独立疾病诊断。</p>
 
         <div class="divider"></div>
 
-        <!-- 03 · 输入指标分析 -->
-        <div class="mod-title">03 · 输入指标分析</div>
+        <!-- 输入指标分析表 -->
+        <div class="mod-title">输入指标明细与提示核对</div>
         <div class="table-wrap">
             <table>
                 <thead>
@@ -468,7 +599,7 @@
                         <th>实验室指标</th>
                         <th>输入值</th>
                         <th>单位</th>
-                        <th>临床参考范围 / 训练集区间</th>
+                        <th>参考范围 / 训练集区间</th>
                         <th>提示信息（不影响计算结果）</th>
                     </tr>
                 </thead>
@@ -476,26 +607,68 @@
             </table>
         </div>
         <p class="caption-note">
-            注：仅作提示标注，不拦截或修改模型计算。临床参考范围与模型预测贡献方向并非同一概念。
+            注：仅区分“临床参考范围提示”与“模型输入范围提示”，均不改变计算结果。
         </p>
 
-        <div class="divider"></div>
+        <!-- 8. 页面底部可折叠信息区（三个模块） + 计算详情追溯 -->
+        <div class="bottom-collapses">
+            <!-- 5. 模型参数与算法说明 -->
+            <details class="collapse-card" id="collapse-params">
+                <summary>模型参数与算法口径说明</summary>
+                <div class="collapse-body">
+                    <h4>一、K-means 聚类模型</h4>
+                    <ul>
+                        <li><strong>六项指标</strong>：PLT、Alb、Cr、PCT、Urea、TBil。</li>
+                        <li><strong>四项指标的 log10(x+1) 转换</strong>：对 Cr、PCT、Urea、TBil 执行 $\log_{10}(x + 1)$ 转换；PLT、Alb 保留原始值。</li>
+                        <li><strong>训练集均值与标准差</strong>：在转换后空间中分别计算各指标的训练集均值与标准差进行 Z-score 标准化。</li>
+                        <li><strong>三个聚类中心</strong>：对应 Phenotype 1、Phenotype 2、Phenotype 3 在六维标准化空间中的质心向量。</li>
+                        <li><strong>欧氏距离公式</strong>：$d_k = \sqrt{\sum_{j=1}^{6}(z_j - c_{k,j})^2}$，$k \in \{1, 2, 3\}$。</li>
+                        <li><strong>Phenotype 编号规则</strong>：按各聚类对应人群 PLT 均值降序锁定 Phenotype 1、Phenotype 2、Phenotype 3。</li>
+                    </ul>
 
-        <!-- 04 · 模型信息与使用限制 -->
-        <div class="mod-title">04 · 模型信息与使用限制</div>
-        <div class="info-box">
-            <ul>
-                <li><strong>研究队列与时间跨度</strong>：基于立克次体病临床队列构建，训练集为本院 2019–2024 年病例，全队列含插补后 24 小时内数据。</li>
-                <li><strong>预测时间口径</strong>：当前输出为“住院期间脓毒症预测概率”。若未剔除基线或早期已发生脓毒症患者，或未限定为预测起点后新发病例，不应直接解释为“未来新发脓毒症发生风险”。</li>
-                <li><strong>使用限制</strong>：本工具仅用于临床科研与教学辅助评估，不能替代临床诊断、病情判断或医师决策，应结合症状、体征及动态检查综合评估。</li>
-            </ul>
+                    <h4>二、Logistic 回归模型</h4>
+                    <ul>
+                        <li><strong>变量处理规则</strong>：按真实训练代码执行，直接使用六项指标原始数值（PLT、Alb、Cr、PCT、Urea、TBil）代入回归方程。</li>
+                        <li><strong>完整截距与六项回归系数</strong>：见下方参数明细。</li>
+                        <li><strong>预测概率计算公式</strong>：$Z = \beta_0 + \beta_{\text{PLT}} X_{\text{PLT}} + \beta_{\text{Alb}} X_{\text{Alb}} + \beta_{\text{Cr}} X_{\text{Cr}} + \beta_{\text{PCT}} X_{\text{PCT}} + \beta_{\text{Urea}} X_{\text{Urea}} + \beta_{\text{TBil}} X_{\text{TBil}}$，$P = \frac{1}{1 + e^{-Z}}$。</li>
+                    </ul>
+                    <pre class="mono-block" id="out-model-params"></pre>
+                </div>
+            </details>
+
+            <!-- 模型信息与使用限制 -->
+            <details class="collapse-card" id="collapse-info">
+                <summary>模型信息与使用限制</summary>
+                <div class="collapse-body">
+                    <ul>
+                        <li><strong>研究队列与时间跨度</strong>：立克次体病回顾性临床队列，训练集为本院 2019–2024 年病例（n = 818），全队列含插补后 24 小时内数据（n = 1,131）。</li>
+                        <li><strong>预测时间口径</strong>：输出为“住院期间脓毒血症预测概率”。若未剔除基线/早期已发生脓毒症病例或未限定为预测起点后新发病例，不应直接等同于“未来新发脓毒症发生风险”。</li>
+                        <li><strong>使用限制</strong>：本工具仅用于临床科研与教学辅助评估，不能替代临床诊断、病情判断或医师决策。</li>
+                    </ul>
+                </div>
+            </details>
+
+            <!-- 研究背景与参考文献 -->
+            <details class="collapse-card" id="collapse-ref">
+                <summary>研究背景与参考文献</summary>
+                <div class="collapse-body">
+                    <p>
+                        立克次体病可累及微循环与多器官系统，早期识别高风险患者与异质性临床表型有助于开展针对性队列观察与机制探索。
+                    </p>
+                    <ul>
+                        <li>Singer M, et al. The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). <em>JAMA</em>. 2016;315(8):801-810.</li>
+                        <li>Collins GS, et al. Transparent Reporting of a multivariable prediction model for Individual Prognosis Or Diagnosis (TRIPOD): the TRIPOD statement. <em>BMJ</em>. 2015;350:g7594.</li>
+                        <li>Wilkerson MD, Hayes DN. ConsensusClusterPlus: a class discovery tool with confidence assessments and item tracking. <em>Bioinformatics</em>. 2010;26(12):1572-1573.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <!-- 可追溯计算详情 -->
+            <details class="collapse-card" id="collapse-trace">
+                <summary>查看计算详情（模型计算结果可追溯）</summary>
+                <div class="trace-content" id="out-trace-content"></div>
+            </details>
         </div>
-
-        <!-- 查看计算详情（模型计算结果可追溯） -->
-        <details class="trace-box" id="trace-details">
-            <summary>查看计算详情（模型计算结果可追溯）</summary>
-            <div class="trace-content" id="out-trace-content"></div>
-        </details>
     </div>
 </div>
 
@@ -504,6 +677,7 @@
     const LOG_VARS = ["cr", "pct", "urea", "tbil"];
 
     const CONFIG = {
+        rocCutoff: 0.497,
         intercept: 4.13101567,
         coef: {
             plt: -0.04971830,
@@ -534,32 +708,51 @@
             "Phenotype 2": { plt: -0.177330, alb:  0.144233, cr: -0.239377, pct: -0.257512, urea: -0.264199, tbil: -0.130075 },
             "Phenotype 3": { plt: -0.684732, alb: -0.826998, cr:  1.510416, pct:  1.614424, urea:  1.695985, tbil:  0.909536 }
         },
-        phenoMeta: {
-            "Phenotype 1": { tag: "轻度异常特征", badgeCls: "badge-ok",     desc: "整体实验室指标异常程度相对较轻。" },
-            "Phenotype 2": { tag: "中度异常特征", badgeCls: "badge-warn",   desc: "多项指标呈中等程度异常。" },
-            "Phenotype 3": { tag: "高危表型",     badgeCls: "badge-danger", desc: "表现为明显的血小板减少、白蛋白降低，以及肝肾功能和炎症相关指标异常。" }
+        phenoStyle: {
+            "Phenotype 1": { badge: "聚类空间最近邻：Phenotype 1", cls: "badge-ok" },
+            "Phenotype 2": { badge: "聚类空间最近邻：Phenotype 2", cls: "badge-warn" },
+            "Phenotype 3": { badge: "聚类空间最近邻：Phenotype 3", cls: "badge-danger" }
         }
     };
 
     const META = [
-        { key: "plt",  label: "血小板",   unit: "×10⁹/L", refLow: 125,  refHigh: 350,   refText: "125–350 ×10⁹/L" },
-        { key: "alb",  label: "白蛋白",   unit: "g/L",    refLow: 40.0, refHigh: 55.0,  refText: "40.0–55.0 g/L" },
-        { key: "cr",   label: "肌酐",     unit: "μmol/L", refLow: 44.0, refHigh: 133.0, refText: "44.0–133.0 μmol/L" },
-        { key: "pct",  label: "降钙素原", unit: "ng/mL",  refLow: null, refHigh: 0.05,  refText: "< 0.05 ng/mL" },
-        { key: "urea", label: "尿素",     unit: "mmol/L", refLow: 2.9,  refHigh: 8.2,   refText: "2.9–8.2 mmol/L" },
-        { key: "tbil", label: "总胆红素", unit: "μmol/L", refLow: 3.4,  refHigh: 20.5,  refText: "3.4–20.5 μmol/L" }
+        { key: "plt",  label: "血小板 PLT",    unit: "×10⁹/L", refLow: 125,  refHigh: 350,   refText: "125–350 ×10⁹/L",   isExt: (v) => v > 1000 },
+        { key: "alb",  label: "白蛋白 Alb",    unit: "g/L",    refLow: 40.0, refHigh: 55.0,  refText: "40.0–55.0 g/L",     isExt: (v) => v < 10 || v > 70 },
+        { key: "cr",   label: "肌酐 Cr",       unit: "μmol/L", refLow: 44.0, refHigh: 133.0, refText: "44.0–133.0 μmol/L", isExt: (v) => v > 1500 },
+        { key: "pct",  label: "降钙素原 PCT",  unit: "ng/mL",  refLow: null, refHigh: 0.05,  refText: "< 0.05 ng/mL",        isExt: (v) => v > 200 },
+        { key: "urea", label: "尿素 Urea",     unit: "mmol/L", refLow: 2.9,  refHigh: 8.2,   refText: "2.9–8.2 mmol/L",    isExt: (v) => v > 80 },
+        { key: "tbil", label: "总胆红素 TBil", unit: "μmol/L", refLow: 3.4,  refHigh: 20.5,  refText: "3.4–20.5 μmol/L",   isExt: (v) => v > 600 }
     ];
+
+    function initParamDump() {
+        document.getElementById("out-model-params").textContent = JSON.stringify({
+            kmeans: {
+                variables: ["PLT", "Alb", "Cr", "PCT", "Urea", "TBil"],
+                log10_plus_1_vars: ["Cr", "PCT", "Urea", "TBil"],
+                train_scale: CONFIG.trainScale,
+                cluster_centers: CONFIG.centers,
+                pheno_order_rule: "按各聚类对应人群 PLT 均值降序排列为 Phenotype 1、Phenotype 2、Phenotype 3"
+            },
+            logistic_regression: {
+                input_rule: "按真实训练代码使用原始输入值（PLT, Alb, Cr, PCT, Urea, TBil）",
+                intercept: CONFIG.intercept,
+                coefficients: CONFIG.coef,
+                roc_cutoff_train: CONFIG.rocCutoff
+            }
+        }, null, 2);
+    }
 
     function clearAll() {
         VARS.forEach((k) => {
             document.getElementById("in-" + k).value = "";
             document.getElementById("field-" + k).classList.remove("invalid");
             document.getElementById("err-" + k).style.display = "none";
+            document.getElementById("ext-" + k).style.display = "none";
         });
         document.getElementById("result-section").style.display = "none";
     }
 
-    function getRefHintObj(val, m) {
+    function getRefHint(val, m) {
         if (m.refLow !== null && val < m.refLow) {
             return { text: "临床参考范围提示：低于参考范围", cls: "tip-low" };
         }
@@ -569,7 +762,7 @@
         return { text: "临床参考范围提示：处于参考范围", cls: "tip-normal" };
     }
 
-    function getTrainRangeHint(val, k) {
+    function getRangeHint(val, k) {
         const r = CONFIG.trainRange[k];
         if (val < r.min || val > r.max) {
             return `模型输入范围提示：超出训练集范围 [${r.min}, ${r.max}]，预测结果可能存在不确定性`;
@@ -577,35 +770,36 @@
         return null;
     }
 
-    function computeAll(rawData) {
-        const transformed = {};
+    function computeModel(rawData) {
+        const logTransformed = {};
         const zScores = {};
 
         VARS.forEach((k) => {
-            transformed[k] = LOG_VARS.includes(k) ? Math.log10(rawData[k] + 1) : rawData[k];
+            logTransformed[k] = LOG_VARS.includes(k) ? Math.log10(rawData[k] + 1) : rawData[k];
             const { mean, sd } = CONFIG.trainScale[k];
-            zScores[k] = (transformed[k] - mean) / (sd || 1);
+            zScores[k] = (logTransformed[k] - mean) / (sd || 1);
         });
 
         const distances = {};
         let nearestPheno = "Phenotype 1";
-        let bestDist = Infinity;
+        let minDist = Infinity;
 
         Object.entries(CONFIG.centers).forEach(([pName, center]) => {
-            let sumSq = 0;
+            let sqSum = 0;
             VARS.forEach((k) => {
                 const diff = zScores[k] - center[k];
-                sumSq += diff * diff;
+                sqSum += diff * diff;
             });
-            const d = Math.sqrt(sumSq);
+            const d = Math.sqrt(sqSum);
             distances[pName] = d;
-            if (d < bestDist) {
-                bestDist = d;
+            if (d < minDist) {
+                minDist = d;
                 nearestPheno = pName;
             }
         });
 
-        const linearPredictor = CONFIG.intercept
+        // Logistic 回归按真实训练代码直接使用原始输入数值
+        const zLinear = CONFIG.intercept
             + CONFIG.coef.plt * rawData.plt
             + CONFIG.coef.alb * rawData.alb
             + CONFIG.coef.cr * rawData.cr
@@ -613,9 +807,54 @@
             + CONFIG.coef.urea * rawData.urea
             + CONFIG.coef.tbil * rawData.tbil;
 
-        const prob = 1 / (1 + Math.exp(-linearPredictor));
+        const prob = 1 / (1 + Math.exp(-zLinear));
 
-        return { rawData, transformed, zScores, distances, nearestPheno, linearPredictor, prob };
+        return { rawData, logTransformed, zScores, distances, nearestPheno, minDist, zLinear, prob };
+    }
+
+    function renderZScoreChart(zScores) {
+        const width = 680;
+        const height = 220;
+        const padLeft = 56;
+        const padRight = 24;
+        const padTop = 24;
+        const padBottom = 36;
+        const plotW = width - padLeft - padRight;
+        const plotH = height - padTop - padBottom;
+
+        const vals = VARS.map((k) => zScores[k]);
+        const maxAbs = Math.max(2.5, ...vals.map((v) => Math.abs(v)));
+        const bound = Math.ceil(maxAbs * 10) / 10;
+
+        const zeroY = padTop + plotH / 2;
+        const colW = plotW / VARS.length;
+        const barW = Math.min(44, colW * 0.45);
+
+        let barsSvg = "";
+        VARS.forEach((k, idx) => {
+            const z = zScores[k];
+            const label = k.toUpperCase();
+            const cx = padLeft + idx * colW + colW / 2;
+            const scaledH = (Math.abs(z) / bound) * (plotH / 2);
+            const y = z >= 0 ? zeroY - scaledH : zeroY;
+            const fill = z >= 0 ? "#2877b8" : "#64748b";
+
+            barsSvg += `<rect x="${(cx - barW / 2).toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(2, scaledH).toFixed(1)}" rx="4" fill="${fill}" />`;
+            const valLabelY = z >= 0 ? Math.max(14, y - 5) : Math.min(height - padBottom - 4, y + scaledH + 13);
+            barsSvg += `<text x="${cx.toFixed(1)}" y="${valLabelY.toFixed(1)}" text-anchor="middle" font-size="11" fill="#1f2937" font-weight="600">${z.toFixed(2)}</text>`;
+            barsSvg += `<text x="${cx.toFixed(1)}" y="${(height - 12).toFixed(1)}" text-anchor="middle" font-size="12" fill="#374151" font-weight="600">${label}</text>`;
+        });
+
+        document.getElementById("out-zscore-chart").innerHTML = `
+            <svg viewBox="0 0 ${width} ${height}" width="100%" height="${height}" role="img" aria-label="六项指标标准化 Z-score 柱状图">
+                <line x1="${padLeft}" y1="${padTop}" x2="${padLeft}" y2="${padTop + plotH}" stroke="#cbd5e1" stroke-width="1" />
+                <line x1="${padLeft}" y1="${zeroY.toFixed(1)}" x2="${width - padRight}" y2="${zeroY.toFixed(1)}" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4,3" />
+                <text x="${padLeft - 8}" y="${padTop + 6}" text-anchor="end" font-size="11" fill="#6b7280">+${bound.toFixed(1)}</text>
+                <text x="${padLeft - 8}" y="${zeroY + 4}" text-anchor="end" font-size="11" fill="#6b7280">0.0</text>
+                <text x="${padLeft - 8}" y="${padTop + plotH}" text-anchor="end" font-size="11" fill="#6b7280">-${bound.toFixed(1)}</text>
+                ${barsSvg}
+            </svg>
+        `;
     }
 
     function runEvaluation() {
@@ -623,40 +862,57 @@
         const rawData = {};
 
         VARS.forEach((k) => {
-            const txt = document.getElementById("in-" + k).value.trim();
-            const num = Number(txt);
-            if (txt === "" || Number.isNaN(num) || num < 0) {
+            document.getElementById("ext-" + k).style.display = "none";
+            const rawStr = document.getElementById("in-" + k).value.trim();
+            const numVal = Number(rawStr);
+            if (rawStr === "" || Number.isNaN(numVal) || numVal < 0) {
                 document.getElementById("field-" + k).classList.add("invalid");
                 document.getElementById("err-" + k).style.display = "block";
                 invalid = true;
             } else {
                 document.getElementById("field-" + k).classList.remove("invalid");
                 document.getElementById("err-" + k).style.display = "none";
-                rawData[k] = num;
+                rawData[k] = numVal;
+                const m = META.find((item) => item.key === k);
+                if (m && m.isExt(numVal)) {
+                    document.getElementById("ext-" + k).style.display = "block";
+                }
             }
         });
 
         if (invalid) return;
 
-        const res = computeAll(rawData);
-        const pMeta = CONFIG.phenoMeta[res.nearestPheno];
+        const res = computeModel(rawData);
+        const probPct = (res.prob * 100).toFixed(1) + "%";
+        const pStyle = CONFIG.phenoStyle[res.nearestPheno];
 
         document.getElementById("result-section").style.display = "block";
-        document.getElementById("out-prob").textContent = (res.prob * 100).toFixed(1) + "%";
-        document.getElementById("out-pheno").textContent = res.nearestPheno;
+        document.getElementById("out-prob").textContent = probPct;
+        document.getElementById("out-prob-line").textContent = probPct;
 
-        const badge = document.getElementById("out-pheno-badge");
-        badge.textContent = pMeta.tag;
-        badge.className = "badge " + pMeta.badgeCls;
-        document.getElementById("out-pheno-desc").textContent = pMeta.desc;
+        document.getElementById("out-pheno-title").textContent = "当前所属：" + res.nearestPheno;
+        const badgeEl = document.getElementById("out-pheno-badge");
+        badgeEl.textContent = pStyle.badge;
+        badgeEl.className = "badge " + pStyle.cls;
+
+        document.getElementById("out-pheno-dists").innerHTML =
+            `<strong>到三个聚类中心的欧氏距离：</strong>` +
+            `Phenotype 1 = <strong>${res.distances["Phenotype 1"].toFixed(4)}</strong>，` +
+            `Phenotype 2 = <strong>${res.distances["Phenotype 2"].toFixed(4)}</strong>，` +
+            `Phenotype 3 = <strong>${res.distances["Phenotype 3"].toFixed(4)}</strong>`;
+
+        document.getElementById("out-pheno-reason").innerHTML =
+            `<strong>归入原因：</strong>当前样本标准化特征与 <strong>${res.nearestPheno}</strong> 聚类中心的欧氏距离最小（${res.minDist.toFixed(4)}）。`;
+
+        renderZScoreChart(res.zScores);
 
         const tbody = document.getElementById("out-input-rows");
         tbody.innerHTML = "";
         META.forEach((m) => {
             const val = rawData[m.key];
             const trRange = CONFIG.trainRange[m.key];
-            const refHint = getRefHintObj(val, m);
-            const rangeTip = getTrainRangeHint(val, m.key);
+            const refHint = getRefHint(val, m);
+            const rangeTip = getRangeHint(val, m.key);
 
             const tr = document.createElement("tr");
             tr.innerHTML =
@@ -670,7 +926,7 @@
 
         const logOnly = {};
         LOG_VARS.forEach((k) => {
-            logOnly[k] = Number(res.transformed[k].toFixed(6));
+            logOnly[k] = Number(res.logTransformed[k].toFixed(6));
         });
 
         const zRounded = {};
@@ -685,12 +941,14 @@
 
         document.getElementById("out-trace-content").innerHTML =
             `<div><strong>1. 六项指标实际输入值</strong><pre class="mono-block">${JSON.stringify(rawData, null, 2)}</pre></div>` +
-            `<div><strong>2. 对数转换后的四项指标（对数底数10加1转换）</strong><pre class="mono-block">${JSON.stringify(logOnly, null, 2)}</pre></div>` +
-            `<div><strong>3. 六项指标标准化后的标准化分值</strong><pre class="mono-block">${JSON.stringify(zRounded, null, 2)}</pre></div>` +
+            `<div><strong>2. 对数转换后的四项指标（log10(x + 1)）</strong><pre class="mono-block">${JSON.stringify(logOnly, null, 2)}</pre></div>` +
+            `<div><strong>3. 六项指标标准化后的 Z-score</strong><pre class="mono-block">${JSON.stringify(zRounded, null, 2)}</pre></div>` +
             `<div><strong>4. 到三个聚类中心的欧氏距离</strong><pre class="mono-block">${JSON.stringify(distRounded, null, 2)}</pre></div>` +
-            `<div><strong>5. 最终表型归属</strong><pre class="mono-block">${res.nearestPheno}</pre></div>` +
-            `<div><strong>6. 逻辑回归线性预测值及最终概率</strong><pre class="mono-block">线性预测值 = ${res.linearPredictor.toFixed(6)}\n预测概率   = ${res.prob.toFixed(6)} (${(res.prob * 100).toFixed(1)}%)</pre></div>`;
+            `<div><strong>5. 最终 Phenotype 归属</strong><pre class="mono-block">${res.nearestPheno}</pre></div>` +
+            `<div><strong>6. Logistic 回归线性预测值及最终概率</strong><pre class="mono-block">线性预测值 Z = ${res.zLinear.toFixed(6)}\n预测概率   P = ${res.prob.toFixed(6)} (${probPct})</pre></div>`;
     }
+
+    initParamDump();
 </script>
 </body>
 </html>
