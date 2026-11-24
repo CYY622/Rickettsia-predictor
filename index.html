@@ -3,244 +3,435 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>立克次体病风险预测模型</title>
+    <title>立克次体病临床决策辅助评估（CDSS）</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --bg-color: #f8f9fa;
+            --primary: #1e3a5f;
+            --primary-light: #eef4fa;
+            --accent: #2563eb;
+            --bg-page: #f4f6f9;
             --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-muted: #7f8c8d;
+            --border-color: #dde3ea;
+            --text-main: #1f2937;
+            --text-sub: #4b5563;
+            --text-muted: #6b7280;
+            --status-low-bg: #eff6ff;
+            --status-low-fg: #1d4ed8;
+            --status-norm-bg: #f0fdf4;
+            --status-norm-fg: #15803d;
+            --status-high-bg: #fef2f2;
+            --status-high-fg: #b91c1c;
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+            background-color: var(--bg-page);
             color: var(--text-main);
             margin: 0;
-            padding: 20px 15px;
-            display: flex;
-            justify-content: center;
+            padding: 24px 16px;
+            line-height: 1.55;
         }
-        .app-container {
+
+        .cdss-container {
+            max-width: 960px;
+            margin: 0 auto;
             background: var(--card-bg);
-            width: 100%;
-            max-width: 480px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
             overflow: hidden;
         }
-        .header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 20px;
-            text-align: center;
+
+        .cdss-header {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
         }
-        .header h1 {
+
+        .cdss-header h1 {
             margin: 0;
-            font-size: 1.35rem;
-            letter-spacing: 1px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
         }
-        .header p {
-            margin: 8px 0 0 0;
-            font-size: 0.9rem;
-            opacity: 0.85;
-            font-weight: 300;
+
+        .cdss-header p {
+            margin: 6px 0 0;
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.85);
         }
-        .form-body {
-            padding: 25px 20px;
+
+        .cdss-body {
+            padding: 24px;
         }
-        .input-group {
-            margin-bottom: 16px;
+
+        .section-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-bottom: 18px;
         }
+
+        .section-title {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
         .input-group label {
             display: block;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--primary-color);
-        }
-        .input-wrapper {
-            position: relative;
-        }
-        .input-wrapper input {
-            width: 100%;
-            padding: 12px 15px;
-            font-size: 1rem;
-            border: 1px solid #dcdde1;
-            border-radius: 8px;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            background-color: #fdfdfd;
-        }
-        .input-wrapper input:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-            background-color: white;
-        }
-        .input-wrapper.error input {
-            border-color: var(--accent-color);
-            background-color: #fdf1f0;
-        }
-        .error-msg {
-            display: none;
-            color: var(--accent-color);
-            font-size: 0.8rem;
-            margin-top: 5px;
-        }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-        .btn {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: #1a252f;
-        }
-        .btn-reset {
-            background-color: #ecf0f1;
-            color: var(--text-muted);
-            flex: 0.4;
-        }
-        .btn-reset:hover {
-            background-color: #bdc3c7;
             color: var(--text-main);
-        }
-        #result-box {
-            display: none;
-            margin-top: 25px;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            animation: slideDown 0.4s ease forwards;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .prob-title {
-            font-size: 0.9rem;
-            letter-spacing: 1px;
             margin-bottom: 6px;
         }
-        .prob-value {
-            font-size: 2.8rem;
-            font-weight: 800;
-            margin: 0;
-            line-height: 1.1;
-        }
-        .phenotype-badge {
-            display: inline-block;
-            margin-top: 12px;
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-size: 0.92rem;
-            font-weight: 700;
-            background: rgba(255, 255, 255, 0.78);
-        }
-        .clinical-advice {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed rgba(0,0,0,0.12);
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 12px;
             font-size: 0.95rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: #ffffff;
+            color: var(--text-main);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .input-group.error input {
+            border-color: #b91c1c;
+            background: #fef2f2;
+        }
+
+        .error-msg {
+            display: none;
+            font-size: 0.78rem;
+            color: #b91c1c;
+            margin-top: 4px;
+        }
+
+        .btn-bar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.92rem;
             font-weight: 600;
-            line-height: 1.55;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-secondary {
+            background: #f8fafc;
+            color: var(--text-sub);
+            border-color: #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background: #f1f5f9;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: #162c48;
+        }
+
+        #result-panel {
+            display: none;
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .top-centers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .center-box-primary {
+            border: 1px solid #bfdbfe;
+            background: #f8fbff;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .center-box-secondary {
+            border: 1px solid var(--border-color);
+            background: #fafbfc;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .prob-main-num {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 6px 0 8px;
+            line-height: 1.15;
+        }
+
+        .phenotype-main-label {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 6px 0 10px;
+        }
+
+        .muted-note {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .phenotype-desc-list {
+            margin: 10px 0 0;
+            padding-left: 18px;
+            font-size: 0.86rem;
+            color: var(--text-sub);
+        }
+
+        .phenotype-desc-list li {
+            margin-bottom: 5px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e5e7eb;
             text-align: left;
         }
-        .footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 0.75rem;
-            color: #bdc3c7;
-            border-top: 1px solid #f1f2f6;
+
+        th {
+            background: #f8fafc;
+            color: var(--text-sub);
+            font-weight: 600;
+        }
+
+        .status-pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-low {
+            background: var(--status-low-bg);
+            color: var(--status-low-fg);
+        }
+
+        .status-normal {
+            background: var(--status-norm-bg);
+            color: var(--status-norm-fg);
+        }
+
+        .status-high {
+            background: var(--status-high-bg);
+            color: var(--status-high-fg);
+        }
+
+        .advice-block h4 {
+            margin: 12px 0 6px;
+            font-size: 0.92rem;
+            color: var(--text-main);
+        }
+
+        .advice-block ul {
+            margin: 4px 0 10px;
+            padding-left: 20px;
+            font-size: 0.88rem;
+            color: var(--text-sub);
+        }
+
+        .advice-block p {
+            margin: 6px 0;
+            font-size: 0.88rem;
+            color: var(--text-sub);
+        }
+
+        .cdss-footer {
+            background: #f8fafc;
+            border-top: 1px solid var(--border-color);
+            padding: 14px 24px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
         }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <div class="header">
-        <h1>立克次体病风险预测模型</h1>
-        <p>宜昌市中心人民医院 V1.0</p>
+<div class="cdss-container">
+    <div class="cdss-header">
+        <h1>立克次体病住院期间脓毒血症风险与临床表型评估</h1>
+        <p>宜昌市中心人民医院 · 临床决策支持科研原型（CDSS）</p>
     </div>
 
-    <div class="form-body">
-        <div class="input-group">
-            <label for="val-plt">血小板 PLT (×10⁹/L)</label>
-            <div class="input-wrapper" id="wrap-plt">
-                <input type="number" id="val-plt" placeholder="例如 45" min="0" step="1">
-                <div class="error-msg" id="err-plt">请输入有效的血小板数值</div>
+    <div class="cdss-body">
+        <div class="section-card">
+            <h2 class="section-title">核心实验室指标录入 <span class="section-tag">入院24h内6项指标</span></h2>
+            <div class="input-grid">
+                <div class="input-group" id="wrap-plt">
+                    <label for="val-plt">血小板 PLT (×10⁹/L)</label>
+                    <input type="number" id="val-plt" placeholder="例如 45" min="0" step="1">
+                    <div class="error-msg" id="err-plt">请输入有效的非负数值</div>
+                </div>
+                <div class="input-group" id="wrap-alb">
+                    <label for="val-alb">白蛋白 Alb (g/L)</label>
+                    <input type="number" id="val-alb" placeholder="例如 32.0" min="0" step="0.1">
+                    <div class="error-msg" id="err-alb">请输入有效的非负数值</div>
+                </div>
+                <div class="input-group" id="wrap-cr">
+                    <label for="val-cr">肌酐 Cr (μmol/L)</label>
+                    <input type="number" id="val-cr" placeholder="例如 150" min="0" step="0.1">
+                    <div class="error-msg" id="err-cr">请输入有效的非负数值</div>
+                </div>
+                <div class="input-group" id="wrap-pct">
+                    <label for="val-pct">降钙素原 PCT (ng/mL)</label>
+                    <input type="number" id="val-pct" placeholder="例如 2.5" min="0" step="0.01">
+                    <div class="error-msg" id="err-pct">请输入有效的非负数值</div>
+                </div>
+                <div class="input-group" id="wrap-urea">
+                    <label for="val-urea">尿素 Urea (mmol/L)</label>
+                    <input type="number" id="val-urea" placeholder="例如 8.5" min="0" step="0.1">
+                    <div class="error-msg" id="err-urea">请输入有效的非负数值</div>
+                </div>
+                <div class="input-group" id="wrap-tbil">
+                    <label for="val-tbil">总胆红素 TBil (μmol/L)</label>
+                    <input type="number" id="val-tbil" placeholder="例如 50" min="0" step="0.1">
+                    <div class="error-msg" id="err-tbil">请输入有效的非负数值</div>
+                </div>
+            </div>
+
+            <div class="btn-bar">
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">重置输入</button>
+                <button type="button" class="btn btn-primary" onclick="evaluatePatient()">执行模型评估</button>
             </div>
         </div>
 
-        <div class="input-group">
-            <label for="val-alb">白蛋白 Alb (g/L)</label>
-            <div class="input-wrapper" id="wrap-alb">
-                <input type="number" id="val-alb" placeholder="例如 32.0" min="0" step="0.1">
-                <div class="error-msg" id="err-alb">请输入有效的白蛋白数值</div>
+        <div id="result-panel">
+            <!-- 第一视觉中心 & 第二视觉中心 -->
+            <div class="top-centers">
+                <!-- 模块一：脓毒症预测概率 -->
+                <div class="center-box-primary">
+                    <h2 class="section-title">模块一：脓毒症预测概率 <span class="section-tag">第一视觉中心</span></h2>
+                    <div class="prob-main-num" id="prob-value">0.0%</div>
+                    <p class="muted-note">
+                        <strong>模型预测值（住院期间脓毒症风险预测）</strong>：基于本研究多因素 Logistic 回归模型及当前输入指标计算得到的住院期间脓毒血症预测概率，用于辅助识别潜在高风险患者，非疾病确诊概率。
+                    </p>
+                    <p class="muted-note" style="margin-top: 8px;">
+                        训练集 ROC 统计参考界值：0.497（49.7%，敏感度 86.9%，特异度 85.2%）。当前未设定未经验证的临床高低危概率切点。
+                    </p>
+                </div>
+
+                <!-- 模块二：临床风险表型识别 -->
+                <div class="center-box-secondary">
+                    <h2 class="section-title">模块二：临床风险表型识别 <span class="section-tag">第二视觉中心</span></h2>
+                    <div class="phenotype-main-label" id="phenotype-heading">临床风险表型：-</div>
+                    <p class="muted-note" id="phenotype-current-summary"></p>
+                    <ul class="phenotype-desc-list">
+                        <li><strong>Phenotype 1</strong>：整体实验室指标异常程度相对较轻。</li>
+                        <li><strong>Phenotype 2</strong>：多项指标呈中等程度异常。</li>
+                        <li><strong>Phenotype 3</strong>：表现为明显的血小板减少、白蛋白降低，以及肝肾功能和炎症相关指标异常。</li>
+                    </ul>
+                    <p class="muted-note" style="margin-top: 8px;">
+                        注：上述表型描述反映研究队列中各表型的群体统计特征；当前患者的个体检测值与表型群体分布相互独立，不混在同一张表中。
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div class="input-group">
-            <label for="val-cr">肌酐 Cr (μmol/L)</label>
-            <div class="input-wrapper" id="wrap-cr">
-                <input type="number" id="val-cr" placeholder="例如 150" min="0" step="0.1">
-                <div class="error-msg" id="err-cr">请输入有效的肌酐数值</div>
+            <!-- 模块三：六项指标的临床特征展示 -->
+            <div class="section-card">
+                <h2 class="section-title">模块三：六项指标的临床特征展示</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>指标名称</th>
+                                <th>当前患者输入值</th>
+                                <th>通用参考范围（供核对）</th>
+                                <th>相对参考范围状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="indicator-table-body"></tbody>
+                    </table>
+                </div>
+                <p class="muted-note" style="margin-top: 10px;">
+                    说明：指标状态按“低于参考范围 / 处于参考范围 / 高于参考范围”划分，实际应结合本院实验室参考区间、检测单位及临床背景判断。实验室参考范围与模型预测贡献方向并非同一概念，指标超出参考范围不等同于模型预测风险必然上升，本模块亦不使用 SHAP 值替代临床检验参考区间。
+                </p>
             </div>
-        </div>
 
-        <div class="input-group">
-            <label for="val-pct">降钙素原 PCT (ng/mL)</label>
-            <div class="input-wrapper" id="wrap-pct">
-                <input type="number" id="val-pct" placeholder="例如 2.5" min="0" step="0.01">
-                <div class="error-msg" id="err-pct">请输入有效的降钙素原数值</div>
+            <!-- 模块四：综合风险提示与临床使用建议 -->
+            <div class="section-card advice-block">
+                <h2 class="section-title">模块四：综合风险提示与临床使用建议</h2>
+                <h4>综合评估结果</h4>
+                <p id="総合评估正文"></p>
+
+                <h4>建议关注的临床指标</h4>
+                <ul>
+                    <li>血小板计数及凝血功能变化</li>
+                    <li>肾功能指标（肌酐、尿素）</li>
+                    <li>肝功能指标（总胆红素等）</li>
+                    <li>炎症相关指标及整体临床状态</li>
+                </ul>
+
+                <h4>使用说明</h4>
+                <p>
+                    本工具基于回顾性临床队列建立，仅用于临床科研及教学辅助评估。预测结果不能替代临床诊断、病情判断及医师决策，应结合患者症状、体征、其他实验室检查和动态病情变化综合评估。
+                </p>
             </div>
-        </div>
-
-        <div class="input-group">
-            <label for="val-urea">尿素 Urea (mmol/L)</label>
-            <div class="input-wrapper" id="wrap-urea">
-                <input type="number" id="val-urea" placeholder="例如 8.5" min="0" step="0.1">
-                <div class="error-msg" id="err-urea">请输入有效的尿素数值</div>
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label for="val-tbil">总胆红素 TBil (μmol/L)</label>
-            <div class="input-wrapper" id="wrap-tbil">
-                <input type="number" id="val-tbil" placeholder="例如 50" min="0" step="0.1">
-                <div class="error-msg" id="err-tbil">请输入有效的总胆红素数值</div>
-            </div>
-        </div>
-
-        <div class="btn-group">
-            <button type="button" class="btn btn-reset" onclick="resetForm()">重置</button>
-            <button type="button" class="btn btn-primary" onclick="calculateRisk()">风险评估</button>
-        </div>
-
-        <div id="result-box">
-            <div class="prob-title">脓毒血症发生概率</div>
-            <div class="prob-value" id="prob-display">0.0%</div>
-            <div class="phenotype-badge" id="phenotype-display">预测分组：-</div>
-            <div class="clinical-advice" id="advice-display"></div>
         </div>
     </div>
 
-    <div class="footer">
-        纯本地安全计算 · 不接触任何患者隐私数据<br>仅供临床科研与入组筛查参考
+    <div class="cdss-footer">
+        本地浏览器端计算，不上传患者隐私数据 · 仅供临床科研与教学辅助评估
     </div>
 </div>
 
@@ -248,35 +439,52 @@
     const INPUT_KEYS = ["plt", "alb", "cr", "pct", "urea", "tbil"];
     const LOG10_PLUS1_KEYS = ["cr", "pct", "urea", "tbil"];
 
-    // 概率分层阈值：0.497 为训练集 ROC 最佳界值（第一道预警线），0.80 为高危阈值
+    // 拟合自《本院_19至24年_训练集.xlsx》的 Logistic 回归原始参数
+    // 与 6 项核心指标标准化及 K-means (K=3) 聚类中心参数
     const MODEL_CONFIG = {
-        thresholds: {
-            moderate: 0.497,
-            high: 0.80
-        },
-        intercept: 4.131016,
+        rocCutoff: 0.497,
+        intercept: 4.13101567,
         coef: {
-            plt: -0.049718,
-            alb: -0.093998,
-            cr: 0.032131,
-            pct: 0.038981,
-            urea: 0.035623,
-            tbil: 0.163997
+            plt: -0.04971830,
+            alb: -0.09399804,
+            cr:   0.03213122,
+            pct:  0.03898075,
+            urea: 0.03562264,
+            tbil: 0.16399747
         },
-        scale: {
-            plt:  { mean: 119.270557, sd: 64.277270 },
-            alb:  { mean: 35.571600, sd: 6.455458 },
-            cr:   { mean: 1.895706,   sd: 0.194602 },
-            pct:  { mean: 0.271282,   sd: 0.282833 },
-            urea: { mean: 0.838442,   sd: 0.193235 },
-            tbil: { mean: 1.122451,   sd: 0.210764 }
+        trainScale: {
+            plt:  { mean: 130.15110024, sd: 100.11114193 },
+            alb:  { mean: 33.01121027,  sd: 6.85319812 },
+            cr:   { mean: 1.90144414,   sd: 0.21146850 },
+            pct:  { mean: 0.28549294,   sd: 0.28965532 },
+            urea: { mean: 0.83631911,   sd: 0.21937543 },
+            tbil: { mean: 1.13483295,   sd: 0.22710609 }
         },
-        centers: {
-            "Phenotype 1": { plt: 0.6908,  alb: 0.4735,  cr: -0.4030, pct: -0.4851, urea: -0.5163, tbil: -0.3697 },
-            "Phenotype 2": { plt: -0.4667, alb: -0.2718, cr: -0.0024, pct: 0.1002,  urea: 0.1150,  tbil: 0.1574 },
-            "Phenotype 3": { plt: -0.9375, alb: -0.9529, cr: 2.3162,  pct: 2.1241,  urea: 2.2068,  tbil: 1.0968 }
+        clusterCenters: {
+            "Phenotype 1": { plt:  2.485726, alb:  0.035900, cr: -0.264590, pct: -0.269146, urea: -0.335068, tbil: -0.275798 },
+            "Phenotype 2": { plt: -0.177330, alb:  0.144233, cr: -0.239377, pct: -0.257512, urea: -0.264199, tbil: -0.130075 },
+            "Phenotype 3": { plt: -0.684732, alb: -0.826998, cr:  1.510416, pct:  1.614424, urea:  1.695985, tbil:  0.909536 }
+        },
+        phenotypeBrief: {
+            "Phenotype 1": "整体实验室指标异常程度相对较轻",
+            "Phenotype 2": "多项指标呈中等程度异常",
+            "Phenotype 3": "表现为明显的血小板减少、白蛋白降低，以及肝肾功能和炎症相关指标异常"
+        },
+        phenotypeRiskTag: {
+            "Phenotype 1": "低危/轻度异常表型",
+            "Phenotype 2": "中危/中等异常表型",
+            "Phenotype 3": "高危表型"
         }
     };
+
+    const INDICATOR_META = [
+        { key: "plt",  name: "血小板 PLT",    unit: "×10⁹/L", low: 125,  high: 350,  refText: "125 – 350 ×10⁹/L" },
+        { key: "alb",  name: "白蛋白 Alb",    unit: "g/L",    low: 40.0, high: 55.0, refText: "40.0 – 55.0 g/L" },
+        { key: "cr",   name: "肌酐 Cr",       unit: "μmol/L", low: 44.0, high: 133.0, refText: "44.0 – 133.0 μmol/L" },
+        { key: "pct",  name: "降钙素原 PCT",  unit: "ng/mL",  low: null, high: 0.05, refText: "< 0.05 ng/mL" },
+        { key: "urea", name: "尿素 Urea",     unit: "mmol/L", low: 2.9,  high: 8.2,  refText: "2.9 – 8.2 mmol/L" },
+        { key: "tbil", name: "总胆红素 TBil", unit: "μmol/L", low: 3.4,  high: 20.5, refText: "3.4 – 20.5 μmol/L" }
+    ];
 
     function clearErrors() {
         INPUT_KEYS.forEach((id) => {
@@ -290,7 +498,7 @@
             document.getElementById("val-" + id).value = "";
         });
         clearErrors();
-        document.getElementById("result-box").style.display = "none";
+        document.getElementById("result-panel").style.display = "none";
     }
 
     function predictPhenotype(data) {
@@ -298,7 +506,7 @@
         INPUT_KEYS.forEach((k) => {
             const raw = data[k];
             const transformed = LOG10_PLUS1_KEYS.includes(k) ? Math.log10(raw + 1) : raw;
-            const { mean, sd } = MODEL_CONFIG.scale[k];
+            const { mean, sd } = MODEL_CONFIG.trainScale[k];
             const safeSd = sd && sd !== 0 ? sd : 1;
             zSample[k] = (transformed - mean) / safeSd;
         });
@@ -306,7 +514,7 @@
         let bestGroup = "Phenotype 1";
         let minDist = Infinity;
 
-        Object.entries(MODEL_CONFIG.centers).forEach(([groupName, center]) => {
+        Object.entries(MODEL_CONFIG.clusterCenters).forEach(([groupName, center]) => {
             let sqDist = 0;
             INPUT_KEYS.forEach((k) => {
                 const diff = zSample[k] - (center[k] ?? 0);
@@ -322,15 +530,42 @@
         return bestGroup;
     }
 
-    function calculateRisk() {
+    function getReferenceStatus(val, meta) {
+        if (meta.low !== null && val < meta.low) {
+            return { label: "低于参考范围", cls: "status-low" };
+        }
+        if (meta.high !== null && val > meta.high) {
+            return { label: "高于参考范围", cls: "status-high" };
+        }
+        return { label: "处于参考范围", cls: "status-normal" };
+    }
+
+    function renderIndicatorTable(data) {
+        const tbody = document.getElementById("indicator-table-body");
+        tbody.innerHTML = "";
+
+        INDICATOR_META.forEach((meta) => {
+            const val = data[meta.key];
+            const status = getReferenceStatus(val, meta);
+            const tr = document.createElement("tr");
+            tr.innerHTML =
+                "<td><strong>" + meta.name + "</strong></td>" +
+                "<td>" + val + " " + meta.unit + "</td>" +
+                "<td>" + meta.refText + "</td>" +
+                "<td><span class='status-pill " + status.cls + "'>" + status.label + "</span></td>";
+            tbody.appendChild(tr);
+        });
+    }
+
+    function evaluatePatient() {
         clearErrors();
         let hasError = false;
         const data = {};
 
         INPUT_KEYS.forEach((id) => {
-            const rawVal = document.getElementById("val-" + id).value.trim();
-            const numVal = Number(rawVal);
-            if (rawVal === "" || Number.isNaN(numVal) || numVal < 0) {
+            const rawStr = document.getElementById("val-" + id).value.trim();
+            const numVal = Number(rawStr);
+            if (rawStr === "" || Number.isNaN(numVal) || numVal < 0) {
                 document.getElementById("wrap-" + id).classList.add("error");
                 document.getElementById("err-" + id).style.display = "block";
                 hasError = true;
@@ -350,40 +585,28 @@
             + MODEL_CONFIG.coef.tbil * data.tbil;
 
         const prob = 1 / (1 + Math.exp(-z));
-        const probPercent = (prob * 100).toFixed(1);
-        const predictedGroup = predictPhenotype(data);
+        const probStr = (prob * 100).toFixed(1) + "%";
+        const phenotype = predictPhenotype(data);
+        const riskTag = MODEL_CONFIG.phenotypeRiskTag[phenotype];
+        const brief = MODEL_CONFIG.phenotypeBrief[phenotype];
 
-        const resultBox = document.getElementById("result-box");
-        const probDisplay = document.getElementById("prob-display");
-        const phenotypeDisplay = document.getElementById("phenotype-display");
-        const adviceDisplay = document.getElementById("advice-display");
+        document.getElementById("result-panel").style.display = "block";
+        document.getElementById("prob-value").innerText = probStr;
+        document.getElementById("phenotype-heading").innerText =
+            "临床风险表型：" + phenotype + "（" + riskTag + "）";
+        document.getElementById("phenotype-current-summary").innerText =
+            "当前输入样本经标准化后距离 " + phenotype + " 聚类中心最近。该表型队列总体特征为：" + brief + "。";
 
-        resultBox.style.display = "block";
-        probDisplay.innerText = probPercent + "%";
-        phenotypeDisplay.innerText = "预测分组：" + predictedGroup;
+        renderIndicatorTable(data);
 
-        if (prob >= MODEL_CONFIG.thresholds.high) {
-            resultBox.style.backgroundColor = "#ffeaa7";
-            resultBox.style.border = "2px solid #e17055";
-            probDisplay.style.color = "#d63031";
-            resultBox.style.color = "#d63031";
-            adviceDisplay.innerHTML =
-                "🚨 高危预警（≥ 80.0%，" + predictedGroup + "）<br><br>【入组决策】<br>脓毒血症风险显著升高，建议重点关注血小板、白蛋白及肝肾功能指标变化。<br><br>👉 <strong>建议尽快启动强化监测与科研留样评估。</strong>";
-        } else if (prob >= MODEL_CONFIG.thresholds.moderate) {
-            resultBox.style.backgroundColor = "#fab1a0";
-            resultBox.style.border = "2px solid #e17055";
-            probDisplay.style.color = "#2d3436";
-            resultBox.style.color = "#2d3436";
-            adviceDisplay.innerHTML =
-                "⚠️ 中危预警（已达 49.7% 预警线，" + predictedGroup + "）<br><br>【入组决策】<br>患者已越过训练集最佳预测界值（0.497），处于风险进展观察区间。<br><br>👉 <strong>建议密切动态复查指标并酌情纳入队列观察。</strong>";
-        } else {
-            resultBox.style.backgroundColor = "#55efc4";
-            resultBox.style.border = "2px solid #00b894";
-            probDisplay.style.color = "#2d3436";
-            resultBox.style.color = "#2d3436";
-            adviceDisplay.innerHTML =
-                "✅ 低危评估（< 49.7%，" + predictedGroup + "）<br><br>【入组决策】<br>当前 6 项指标未触发 49.7% 预警线，脓毒血症风险相对较低。<br><br>👉 <strong>按常规临床路径管理与观察。</strong>";
-        }
+        const cutoffNote = prob >= MODEL_CONFIG.rocCutoff
+            ? "高于训练集 ROC 统计界值（49.7%）"
+            : "低于训练集 ROC 统计界值（49.7%）";
+
+        document.getElementById("総合评估正文").innerHTML =
+            "当前输入指标对应的模型预测概率为 <strong>" + probStr + "</strong>（" + cutoffNote +
+            "），临床表型识别结果为 <strong>" + phenotype + "（" + riskTag + "）</strong>。" +
+            "根据本研究队列的观察结果，相关高危表型患者住院期间脓毒症及多器官功能损伤相关结局的发生比例较高，建议结合患者床旁表现与动态检查综合研判。";
     }
 </script>
 </body>
