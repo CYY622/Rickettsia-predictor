@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>立克次体病住院期间脓毒症风险与临床表型评估</title>
+    <title>立克次体病住院期间脓毒症风险与临床表型评估 V2.0 · 宜昌市中心人民医院</title>
     <style>
         :root {
             --primary: #1e3a5f;
@@ -66,7 +66,7 @@
 
         .hero-sub {
             margin: 8px auto 10px;
-            max-width: 720px;
+            max-width: 740px;
             font-size: 0.9rem;
             color: var(--text-sub);
         }
@@ -476,16 +476,14 @@
 </head>
 <body>
 <div class="page-shell">
-    <!-- 1. 首页标题和副标题 -->
     <div class="hero-box">
-        <h1>立克次体病住院期间脓毒症风险与临床表型评估</h1>
+        <h1>立克次体病住院期间脓毒症风险与临床表型评估 V2.0 · 宜昌市中心人民医院</h1>
         <div class="hero-sub">基于六项常规实验室指标的脓毒症风险预测与临床表型识别研究工具</div>
         <span class="badge badge-info">临床科研工具 · 非临床诊断系统</span>
     </div>
 
     <div class="divider"></div>
 
-    <!-- 2. 六项指标输入区域 -->
     <div class="input-panel">
         <div class="mod-title">六项常规实验室指标输入</div>
         <div class="input-grid">
@@ -537,13 +535,10 @@
         </div>
     </div>
 
-    <!-- 结果区域 -->
     <div id="result-section">
         <div class="divider"></div>
 
-        <!-- 6. 结果卡片视觉层级（两大核心结果并排） + 3 & 4 精细打磨 -->
         <div class="core-two-col">
-            <!-- 3. 预测概率结果卡片 -->
             <div class="prob-card">
                 <div>
                     <div class="prob-top-label">住院期间脓毒症预测概率</div>
@@ -556,7 +551,6 @@
                 </div>
             </div>
 
-            <!-- 4. Phenotype 临床表型结果 -->
             <div class="pheno-card">
                 <div>
                     <div class="pheno-head">
@@ -579,7 +573,6 @@
 
         <div class="divider"></div>
 
-        <!-- 7. 六项指标标准化值可视化 -->
         <div class="chart-card">
             <div class="mod-title">六项指标标准化值分布（Z-score，聚类空间）</div>
             <div class="svg-wrap" id="out-zscore-chart"></div>
@@ -590,7 +583,6 @@
 
         <div class="divider"></div>
 
-        <!-- 输入指标分析表 -->
         <div class="mod-title">输入指标明细与提示核对</div>
         <div class="table-wrap">
             <table>
@@ -610,9 +602,7 @@
             注：仅区分“临床参考范围提示”与“模型输入范围提示”，均不改变计算结果。
         </p>
 
-        <!-- 8. 页面底部可折叠信息区（三个模块） + 计算详情追溯 -->
         <div class="bottom-collapses">
-            <!-- 5. 模型参数与算法说明 -->
             <details class="collapse-card" id="collapse-params">
                 <summary>模型参数与算法口径说明</summary>
                 <div class="collapse-body">
@@ -636,34 +626,17 @@
                 </div>
             </details>
 
-            <!-- 模型信息与使用限制 -->
             <details class="collapse-card" id="collapse-info">
                 <summary>模型信息与使用限制</summary>
                 <div class="collapse-body">
                     <ul>
-                        <li><strong>研究队列与时间跨度</strong>：立克次体病回顾性临床队列，训练集为本院 2019–2024 年病例（n = 818），全队列含插补后 24 小时内数据（n = 1,131）。</li>
+                        <li><strong>研究队列与时间跨度</strong>：立克次体病回顾性临床队列，训练集为本院 2019–2024 年病例，全队列含插补后 24 小时内数据。</li>
                         <li><strong>预测时间口径</strong>：输出为“住院期间脓毒血症预测概率”。若未剔除基线/早期已发生脓毒症病例或未限定为预测起点后新发病例，不应直接等同于“未来新发脓毒症发生风险”。</li>
                         <li><strong>使用限制</strong>：本工具仅用于临床科研与教学辅助评估，不能替代临床诊断、病情判断或医师决策。</li>
                     </ul>
                 </div>
             </details>
 
-            <!-- 研究背景与参考文献 -->
-            <details class="collapse-card" id="collapse-ref">
-                <summary>研究背景与参考文献</summary>
-                <div class="collapse-body">
-                    <p>
-                        立克次体病可累及微循环与多器官系统，早期识别高风险患者与异质性临床表型有助于开展针对性队列观察与机制探索。
-                    </p>
-                    <ul>
-                        <li>Singer M, et al. The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). <em>JAMA</em>. 2016;315(8):801-810.</li>
-                        <li>Collins GS, et al. Transparent Reporting of a multivariable prediction model for Individual Prognosis Or Diagnosis (TRIPOD): the TRIPOD statement. <em>BMJ</em>. 2015;350:g7594.</li>
-                        <li>Wilkerson MD, Hayes DN. ConsensusClusterPlus: a class discovery tool with confidence assessments and item tracking. <em>Bioinformatics</em>. 2010;26(12):1572-1573.</li>
-                    </ul>
-                </div>
-            </details>
-
-            <!-- 可追溯计算详情 -->
             <details class="collapse-card" id="collapse-trace">
                 <summary>查看计算详情（模型计算结果可追溯）</summary>
                 <div class="trace-content" id="out-trace-content"></div>
@@ -798,7 +771,6 @@
             }
         });
 
-        // Logistic 回归按真实训练代码直接使用原始输入数值
         const zLinear = CONFIG.intercept
             + CONFIG.coef.plt * rawData.plt
             + CONFIG.coef.alb * rawData.alb
