@@ -134,23 +134,31 @@
         }
         .prob-title {
             font-size: 0.9rem;
-            text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
         .prob-value {
             font-size: 2.8rem;
             font-weight: 800;
             margin: 0;
-            line-height: 1;
+            line-height: 1.1;
+        }
+        .phenotype-badge {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.78);
         }
         .clinical-advice {
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px dashed rgba(0,0,0,0.1);
+            border-top: 1px dashed rgba(0,0,0,0.12);
             font-size: 0.95rem;
             font-weight: 600;
-            line-height: 1.5;
+            line-height: 1.55;
             text-align: left;
         }
         .footer {
@@ -163,156 +171,220 @@
     </style>
 </head>
 <body>
-
 <div class="app-container">
     <div class="header">
         <h1>立克次体病风险预测模型</h1>
         <p>宜昌市中心人民医院 V1.0</p>
     </div>
-    
+
     <div class="form-body">
         <div class="input-group">
-            <label>年龄</label>
-            <div class="input-wrapper" id="wrap-age">
-                <input type="number" id="val-age" placeholder="请输入患者年龄" min="0" step="1">
-                <div class="error-msg" id="err-age">请输入有效的年龄</div>
-            </div>
-        </div>
-        
-        <div class="input-group">
-            <label>血小板 (×10⁹/L)</label>
+            <label for="val-plt">血小板 PLT (×10⁹/L)</label>
             <div class="input-wrapper" id="wrap-plt">
-                <input type="number" id="val-plt" placeholder="例如: 45" min="0" step="1">
+                <input type="number" id="val-plt" placeholder="例如 45" min="0" step="1">
                 <div class="error-msg" id="err-plt">请输入有效的血小板数值</div>
             </div>
         </div>
-        
+
         <div class="input-group">
-            <label>谷草转氨酶 (U/L)</label>
-            <div class="input-wrapper" id="wrap-ast">
-                <input type="number" id="val-ast" placeholder="例如: 120" min="0" step="0.1">
-                <div class="error-msg" id="err-ast">请输入有效的谷草转氨酶数值</div>
+            <label for="val-alb">白蛋白 Alb (g/L)</label>
+            <div class="input-wrapper" id="wrap-alb">
+                <input type="number" id="val-alb" placeholder="例如 32.0" min="0" step="0.1">
+                <div class="error-msg" id="err-alb">请输入有效的白蛋白数值</div>
             </div>
         </div>
-        
+
         <div class="input-group">
-            <label>总胆红素 (μmol/L)</label>
-            <div class="input-wrapper" id="wrap-tbil">
-                <input type="number" id="val-tbil" placeholder="例如: 50" min="0" step="0.1">
-                <div class="error-msg" id="err-tbil">请输入有效的总胆红素数值</div>
-            </div>
-        </div>
-        
-        <div class="input-group">
-            <label>肌酐 (μmol/L)</label>
+            <label for="val-cr">肌酐 Cr (μmol/L)</label>
             <div class="input-wrapper" id="wrap-cr">
-                <input type="number" id="val-cr" placeholder="例如: 150" min="0" step="0.1">
+                <input type="number" id="val-cr" placeholder="例如 150" min="0" step="0.1">
                 <div class="error-msg" id="err-cr">请输入有效的肌酐数值</div>
             </div>
         </div>
 
+        <div class="input-group">
+            <label for="val-pct">降钙素原 PCT (ng/mL)</label>
+            <div class="input-wrapper" id="wrap-pct">
+                <input type="number" id="val-pct" placeholder="例如 2.5" min="0" step="0.01">
+                <div class="error-msg" id="err-pct">请输入有效的降钙素原数值</div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="val-urea">尿素 Urea (mmol/L)</label>
+            <div class="input-wrapper" id="wrap-urea">
+                <input type="number" id="val-urea" placeholder="例如 8.5" min="0" step="0.1">
+                <div class="error-msg" id="err-urea">请输入有效的尿素数值</div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="val-tbil">总胆红素 TBil (μmol/L)</label>
+            <div class="input-wrapper" id="wrap-tbil">
+                <input type="number" id="val-tbil" placeholder="例如 50" min="0" step="0.1">
+                <div class="error-msg" id="err-tbil">请输入有效的总胆红素数值</div>
+            </div>
+        </div>
+
         <div class="btn-group">
-            <button class="btn btn-reset" onclick="resetForm()">重置</button>
-            <button class="btn btn-primary" onclick="calculateRisk()">风险评估</button>
+            <button type="button" class="btn btn-reset" onclick="resetForm()">重置</button>
+            <button type="button" class="btn btn-primary" onclick="calculateRisk()">风险评估</button>
         </div>
 
         <div id="result-box">
             <div class="prob-title">脓毒血症发生概率</div>
             <div class="prob-value" id="prob-display">0.0%</div>
+            <div class="phenotype-badge" id="phenotype-display">预测分组：-</div>
             <div class="clinical-advice" id="advice-display"></div>
         </div>
     </div>
-    
+
     <div class="footer">
-        纯本地安全计算 | 不接触任何患者隐私数据<br>仅供临床科研与入组筛查参考
+        纯本地安全计算 · 不接触任何患者隐私数据<br>仅供临床科研与入组筛查参考
     </div>
 </div>
 
 <script>
+    const INPUT_KEYS = ["plt", "alb", "cr", "pct", "urea", "tbil"];
+    const LOG10_PLUS1_KEYS = ["cr", "pct", "urea", "tbil"];
+
+    // 概率分层阈值：0.497 为训练集 ROC 最佳界值（第一道预警线），0.80 为高危阈值
+    const MODEL_CONFIG = {
+        thresholds: {
+            moderate: 0.497,
+            high: 0.80
+        },
+        intercept: 4.131016,
+        coef: {
+            plt: -0.049718,
+            alb: -0.093998,
+            cr: 0.032131,
+            pct: 0.038981,
+            urea: 0.035623,
+            tbil: 0.163997
+        },
+        scale: {
+            plt:  { mean: 119.270557, sd: 64.277270 },
+            alb:  { mean: 35.571600, sd: 6.455458 },
+            cr:   { mean: 1.895706,   sd: 0.194602 },
+            pct:  { mean: 0.271282,   sd: 0.282833 },
+            urea: { mean: 0.838442,   sd: 0.193235 },
+            tbil: { mean: 1.122451,   sd: 0.210764 }
+        },
+        centers: {
+            "Phenotype 1": { plt: 0.6908,  alb: 0.4735,  cr: -0.4030, pct: -0.4851, urea: -0.5163, tbil: -0.3697 },
+            "Phenotype 2": { plt: -0.4667, alb: -0.2718, cr: -0.0024, pct: 0.1002,  urea: 0.1150,  tbil: 0.1574 },
+            "Phenotype 3": { plt: -0.9375, alb: -0.9529, cr: 2.3162,  pct: 2.1241,  urea: 2.2068,  tbil: 1.0968 }
+        }
+    };
+
     function clearErrors() {
-        const inputs = ['age', 'plt', 'ast', 'tbil', 'cr'];
-        inputs.forEach(id => {
-            document.getElementById('wrap-' + id).classList.remove('error');
-            document.getElementById('err-' + id).style.display = 'none';
+        INPUT_KEYS.forEach((id) => {
+            document.getElementById("wrap-" + id).classList.remove("error");
+            document.getElementById("err-" + id).style.display = "none";
         });
     }
 
     function resetForm() {
-        const inputs = ['age', 'plt', 'ast', 'tbil', 'cr'];
-        inputs.forEach(id => {
-            document.getElementById('val-' + id).value = '';
+        INPUT_KEYS.forEach((id) => {
+            document.getElementById("val-" + id).value = "";
         });
         clearErrors();
-        document.getElementById('result-box').style.display = 'none';
+        document.getElementById("result-box").style.display = "none";
+    }
+
+    function predictPhenotype(data) {
+        const zSample = {};
+        INPUT_KEYS.forEach((k) => {
+            const raw = data[k];
+            const transformed = LOG10_PLUS1_KEYS.includes(k) ? Math.log10(raw + 1) : raw;
+            const { mean, sd } = MODEL_CONFIG.scale[k];
+            const safeSd = sd && sd !== 0 ? sd : 1;
+            zSample[k] = (transformed - mean) / safeSd;
+        });
+
+        let bestGroup = "Phenotype 1";
+        let minDist = Infinity;
+
+        Object.entries(MODEL_CONFIG.centers).forEach(([groupName, center]) => {
+            let sqDist = 0;
+            INPUT_KEYS.forEach((k) => {
+                const diff = zSample[k] - (center[k] ?? 0);
+                sqDist += diff * diff;
+            });
+            const dist = Math.sqrt(sqDist);
+            if (dist < minDist) {
+                minDist = dist;
+                bestGroup = groupName;
+            }
+        });
+
+        return bestGroup;
     }
 
     function calculateRisk() {
         clearErrors();
         let hasError = false;
-
         const data = {};
-        const inputs = ['age', 'plt', 'ast', 'tbil', 'cr'];
-        
-        inputs.forEach(id => {
-            let val = document.getElementById('val-' + id).value;
-            if (val === '' || isNaN(val) || val < 0) {
-                document.getElementById('wrap-' + id).classList.add('error');
-                document.getElementById('err-' + id).style.display = 'block';
+
+        INPUT_KEYS.forEach((id) => {
+            const rawVal = document.getElementById("val-" + id).value.trim();
+            const numVal = Number(rawVal);
+            if (rawVal === "" || Number.isNaN(numVal) || numVal < 0) {
+                document.getElementById("wrap-" + id).classList.add("error");
+                document.getElementById("err-" + id).style.display = "block";
                 hasError = true;
             } else {
-                data[id] = parseFloat(val);
+                data[id] = numVal;
             }
         });
 
         if (hasError) return;
 
-        // 底层回归模型数学公式 (代码内部变量不影响界面显示)
-        const Z = 0.922435 
-                + (0.029720 * data.age) 
-                - (0.047621 * data.plt) 
-                + (0.005563 * data.ast) 
-                + (0.098469 * data.tbil) 
-                + (0.012640 * data.cr);
-                
-        const P = 1 / (1 + Math.exp(-Z));
-        const probPercent = (P * 100).toFixed(1);
+        const z = MODEL_CONFIG.intercept
+            + MODEL_CONFIG.coef.plt * data.plt
+            + MODEL_CONFIG.coef.alb * data.alb
+            + MODEL_CONFIG.coef.cr * data.cr
+            + MODEL_CONFIG.coef.pct * data.pct
+            + MODEL_CONFIG.coef.urea * data.urea
+            + MODEL_CONFIG.coef.tbil * data.tbil;
 
-        const resultBox = document.getElementById('result-box');
-        const probDisplay = document.getElementById('prob-display');
-        const adviceDisplay = document.getElementById('advice-display');
+        const prob = 1 / (1 + Math.exp(-z));
+        const probPercent = (prob * 100).toFixed(1);
+        const predictedGroup = predictPhenotype(data);
 
-        resultBox.style.display = 'block';
-        probDisplay.innerText = probPercent + '%';
+        const resultBox = document.getElementById("result-box");
+        const probDisplay = document.getElementById("prob-display");
+        const phenotypeDisplay = document.getElementById("phenotype-display");
+        const adviceDisplay = document.getElementById("advice-display");
 
-        // 核心临床分层与科研留样决策逻辑（全中文规范版）
-        if (P >= 0.80) {
-            resultBox.style.backgroundColor = '#ffeaa7';
-            resultBox.style.border = '2px solid #e17055';
-            probDisplay.style.color = '#d63031';
-            resultBox.style.color = '#d63031';
-            
-            if (data.plt <= 50) {
-                adviceDisplay.innerHTML = '🚨 极高危预警 (典型表型 3 特征)<br><br>【入组决策】<br>脓毒血症风险极高，且伴随重度血小板消耗，符合内皮崩解极危重表型。<br><br>👉 <strong>强烈建议立即启动 PBMC 及血浆留样流程，锁定多组学核心研究对象！</strong>';
-            } else {
-                adviceDisplay.innerHTML = '🚨 极高危预警 (多脏器受损驱动)<br><br>【入组决策】<br>综合脏器衰竭风险极高，虽非典型表型 3，但具有极高的科研价值。<br><br>👉 <strong>建议立即进行 PBMC留样，作为极危重组别的重要对照。</strong>';
-            }
-        } 
-        else if (P >= 0.50 || data.plt <= 100) {
-            resultBox.style.backgroundColor = '#fab1a0';
-            resultBox.style.border = '2px solid #e17055';
-            probDisplay.style.color = '#2d3436';
-            resultBox.style.color = '#2d3436';
-            adviceDisplay.innerHTML = '⚠️ 中高危预警 (倾向表型 2 进展期)<br><br>【入组决策】<br>患者正处于脏器受损进展期或重度血小板消耗边缘。<br><br>👉 <strong>建议密切关注指标动态，可酌情留取 PBMC样本作为疾病演变过程的中间态队列样本。</strong>';
-        } 
-        else {
-            resultBox.style.backgroundColor = '#55efc4';
-            resultBox.style.border = '2px solid #00b894';
-            probDisplay.style.color = '#2d3436';
-            resultBox.style.color = '#2d3436';
-            adviceDisplay.innerHTML = '✅ 低危评估 (符合 表型 1 特征)<br><br>【入组决策】<br>病情相对稳定，尚未出现重度多脏器受损趋势。<br><br>👉 <strong>暂不作为极危重机制研究的首选靶向对象，不强制要求留取特异性标本。</strong>';
+        resultBox.style.display = "block";
+        probDisplay.innerText = probPercent + "%";
+        phenotypeDisplay.innerText = "预测分组：" + predictedGroup;
+
+        if (prob >= MODEL_CONFIG.thresholds.high) {
+            resultBox.style.backgroundColor = "#ffeaa7";
+            resultBox.style.border = "2px solid #e17055";
+            probDisplay.style.color = "#d63031";
+            resultBox.style.color = "#d63031";
+            adviceDisplay.innerHTML =
+                "🚨 高危预警（≥ 80.0%，" + predictedGroup + "）<br><br>【入组决策】<br>脓毒血症风险显著升高，建议重点关注血小板、白蛋白及肝肾功能指标变化。<br><br>👉 <strong>建议尽快启动强化监测与科研留样评估。</strong>";
+        } else if (prob >= MODEL_CONFIG.thresholds.moderate) {
+            resultBox.style.backgroundColor = "#fab1a0";
+            resultBox.style.border = "2px solid #e17055";
+            probDisplay.style.color = "#2d3436";
+            resultBox.style.color = "#2d3436";
+            adviceDisplay.innerHTML =
+                "⚠️ 中危预警（已达 49.7% 预警线，" + predictedGroup + "）<br><br>【入组决策】<br>患者已越过训练集最佳预测界值（0.497），处于风险进展观察区间。<br><br>👉 <strong>建议密切动态复查指标并酌情纳入队列观察。</strong>";
+        } else {
+            resultBox.style.backgroundColor = "#55efc4";
+            resultBox.style.border = "2px solid #00b894";
+            probDisplay.style.color = "#2d3436";
+            resultBox.style.color = "#2d3436";
+            adviceDisplay.innerHTML =
+                "✅ 低危评估（< 49.7%，" + predictedGroup + "）<br><br>【入组决策】<br>当前 6 项指标未触发 49.7% 预警线，脓毒血症风险相对较低。<br><br>👉 <strong>按常规临床路径管理与观察。</strong>";
         }
     }
 </script>
-
 </body>
 </html>
