@@ -121,13 +121,26 @@
 
         .input-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 14px;
+        }
+
+        @media (max-width: 820px) {
+            .input-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 540px) {
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .field {
             display: flex;
             flex-direction: column;
+            min-width: 0;
         }
 
         .field label {
@@ -307,7 +320,7 @@
         }
 
         .dist-box {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             border: 1px solid #e5e7eb;
             border-radius: 8px;
             padding: 8px 10px;
@@ -488,40 +501,40 @@
         <div class="mod-title">六项常规实验室指标输入</div>
         <div class="input-grid">
             <div class="field" id="field-plt">
-                <label for="in-plt">血小板 PLT<span class="req-mark">*</span><span class="unit-tag">(×10⁹/L)</span></label>
+                <label for="in-plt">血小板<span class="req-mark">*</span><span class="unit-tag">(×10⁹/L)</span></label>
                 <input type="number" id="in-plt" placeholder="例如：110（必填）" min="0" step="0.1" required>
                 <div class="field-err" id="err-plt">必填项：请输入有效的非负数值</div>
-                <div class="field-extreme" id="ext-plt">极值提醒：PLT &gt; 1000 ×10⁹/L，请核对单位或录入值。</div>
+                <div class="field-extreme" id="ext-plt">极值提醒：血小板 &gt; 1000 ×10⁹/L，请核对单位或录入值。</div>
             </div>
             <div class="field" id="field-alb">
-                <label for="in-alb">白蛋白 Alb<span class="req-mark">*</span><span class="unit-tag">(g/L)</span></label>
+                <label for="in-alb">白蛋白<span class="req-mark">*</span><span class="unit-tag">(g/L)</span></label>
                 <input type="number" id="in-alb" placeholder="例如：33.0（必填）" min="0" step="0.1" required>
                 <div class="field-err" id="err-alb">必填项：请输入有效的非负数值</div>
-                <div class="field-extreme" id="ext-alb">极值提醒：Alb &lt; 10 或 &gt; 70 g/L，请核对单位或录入值。</div>
+                <div class="field-extreme" id="ext-alb">极值提醒：白蛋白 &lt; 10 或 &gt; 70 g/L，请核对单位或录入值。</div>
             </div>
             <div class="field" id="field-cr">
-                <label for="in-cr">肌酐 Cr<span class="req-mark">*</span><span class="unit-tag">(μmol/L)</span></label>
+                <label for="in-cr">肌酐<span class="req-mark">*</span><span class="unit-tag">(μmol/L)</span></label>
                 <input type="number" id="in-cr" placeholder="例如：85.0（必填）" min="0" step="0.1" required>
                 <div class="field-err" id="err-cr">必填项：请输入有效的非负数值</div>
-                <div class="field-extreme" id="ext-cr">极值提醒：Cr &gt; 1500 μmol/L，请核对单位或录入值。</div>
+                <div class="field-extreme" id="ext-cr">极值提醒：肌酐 &gt; 1500 μmol/L，请核对单位或录入值。</div>
             </div>
             <div class="field" id="field-pct">
-                <label for="in-pct">降钙素原 PCT<span class="req-mark">*</span><span class="unit-tag">(ng/mL)</span></label>
+                <label for="in-pct">降钙素原<span class="req-mark">*</span><span class="unit-tag">(ng/mL)</span></label>
                 <input type="number" id="in-pct" placeholder="例如：0.85（必填）" min="0" step="0.01" required>
                 <div class="field-err" id="err-pct">必填项：请输入有效的非负数值</div>
-                <div class="field-extreme" id="ext-pct">极值提醒：PCT &gt; 200 ng/mL，请核对单位或录入值。</div>
+                <div class="field-extreme" id="ext-pct">极值提醒：降钙素原 &gt; 200 ng/mL，请核对单位或录入值。</div>
             </div>
             <div class="field" id="field-urea">
-                <label for="in-urea">尿素 Urea<span class="req-mark">*</span><span class="unit-tag">(mmol/L)</span></label>
+                <label for="in-urea">尿素<span class="req-mark">*</span><span class="unit-tag">(mmol/L)</span></label>
                 <input type="number" id="in-urea" placeholder="例如：6.2（必填）" min="0" step="0.1" required>
                 <div class="field-err" id="err-urea">必填项：请输入有效的非负数值</div>
-                <div class="field-extreme" id="ext-urea">极值提醒：Urea &gt; 80 mmol/L，请核对单位或录入值。</div>
+                <div class="field-extreme" id="ext-urea">极值提醒：尿素 &gt; 80 mmol/L，请核对单位或录入值。</div>
             </div>
             <div class="field" id="field-tbil">
-                <label for="in-tbil">总胆红素 TBil<span class="req-mark">*</span><span class="unit-tag">(μmol/L)</span></label>
+                <label for="in-tbil">总胆红素<span class="req-mark">*</span><span class="unit-tag">(μmol/L)</span></label>
                 <input type="number" id="in-tbil" placeholder="例如：15.0（必填）" min="0" step="0.1" required>
                 <div class="field-err" id="err-tbil">必填项：请输入有效的非负数值</div>
-                <div class="field-extreme" id="ext-tbil">极值提醒：TBil &gt; 600 μmol/L，请核对单位或录入值。</div>
+                <div class="field-extreme" id="ext-tbil">极值提醒：总胆红素 &gt; 600 μmol/L，请核对单位或录入值。</div>
             </div>
         </div>
 
@@ -546,7 +559,7 @@
                 </div>
                 <div class="prob-layers">
                     <div><strong>1. 最终预测概率：</strong><span id="out-prob-line">0.0%</span></div>
-                    <div><strong>2. 模型：</strong>Logistic Regression（训练集 ROC 最佳统计界值 0.497 源于训练集 ROC 分析，非临床诊断界值）</div>
+                    <div><strong>2. 模型：</strong>多因素逻辑回归模型（0.497 为训练集受试者工作特征曲线分析所得统计界值，非临床诊断界值）</div>
                     <div><strong>3. 解释：</strong>统计学风险估计，不等同于临床确诊。</div>
                 </div>
             </div>
@@ -554,14 +567,14 @@
             <div class="pheno-card">
                 <div>
                     <div class="pheno-head">
-                        <span class="pheno-name" id="out-pheno-title">当前所属：Phenotype 1</span>
+                        <span class="pheno-name" id="out-pheno-title">当前所属：表型 1</span>
                         <span class="badge badge-info" id="out-pheno-badge">表型归属</span>
                     </div>
                     <div class="pheno-details">
                         <div class="dist-box" id="out-pheno-dists"></div>
                         <div id="out-pheno-reason"></div>
                         <div id="out-pheno-order">
-                            <strong>表型编号规则：</strong>按各聚类对应人群血小板（PLT）均值降序排列为 Phenotype 1、Phenotype 2、Phenotype 3。
+                            <strong>表型编号规则：</strong>按各聚类对应人群血小板均值降序排列为表型 1、表型 2、表型 3。
                         </div>
                     </div>
                 </div>
@@ -574,10 +587,10 @@
         <div class="divider"></div>
 
         <div class="chart-card">
-            <div class="mod-title">六项指标标准化值分布（Z-score，聚类空间）</div>
+            <div class="mod-title">六项指标标准化值分布（标准化分值，聚类空间）</div>
             <div class="svg-wrap" id="out-zscore-chart"></div>
             <p class="caption-note">
-                统计量说明：展示当前患者六项指标经相应变换后按训练集均值与标准差计算的 Z-score（无量纲），0 表示训练集均值水平。
+                统计量说明：展示当前患者六项指标经相应变换后按训练集均值与标准差计算的标准化分值（无量纲），0 表示训练集均值水平。
             </p>
         </div>
 
@@ -606,21 +619,21 @@
             <details class="collapse-card" id="collapse-params">
                 <summary>模型参数与算法口径说明</summary>
                 <div class="collapse-body">
-                    <h4>一、K-means 聚类模型</h4>
+                    <h4>一、聚类分析模型（K-means 聚类）</h4>
                     <ul>
-                        <li><strong>六项指标</strong>：PLT、Alb、Cr、PCT、Urea、TBil。</li>
-                        <li><strong>四项指标的 log10(x+1) 转换</strong>：对 Cr、PCT、Urea、TBil 执行 $\log_{10}(x + 1)$ 转换；PLT、Alb 保留原始值。</li>
-                        <li><strong>训练集均值与标准差</strong>：在转换后空间中分别计算各指标的训练集均值与标准差进行 Z-score 标准化。</li>
-                        <li><strong>三个聚类中心</strong>：对应 Phenotype 1、Phenotype 2、Phenotype 3 在六维标准化空间中的质心向量。</li>
+                        <li><strong>六项指标</strong>：血小板、白蛋白、肌酐、降钙素原、尿素、总胆红素。</li>
+                        <li><strong>四项指标的对数转换</strong>：对肌酐、降钙素原、尿素、总胆红素执行以 10 为底加 1 的对数转换（$\log_{10}(x + 1)$）；血小板、白蛋白保留原始数值。</li>
+                        <li><strong>训练集均值与标准差</strong>：在转换后空间中分别计算各指标的训练集均值与标准差进行标准化。</li>
+                        <li><strong>三个聚类中心</strong>：对应表型 1、表型 2、表型 3 在六维标准化空间中的质心向量。</li>
                         <li><strong>欧氏距离公式</strong>：$d_k = \sqrt{\sum_{j=1}^{6}(z_j - c_{k,j})^2}$，$k \in \{1, 2, 3\}$。</li>
-                        <li><strong>Phenotype 编号规则</strong>：按各聚类对应人群 PLT 均值降序锁定 Phenotype 1、Phenotype 2、Phenotype 3。</li>
+                        <li><strong>表型编号规则</strong>：按各聚类对应人群血小板均值降序排列为表型 1、表型 2、表型 3。</li>
                     </ul>
 
-                    <h4>二、Logistic 回归模型</h4>
+                    <h4>二、多因素逻辑回归模型</h4>
                     <ul>
-                        <li><strong>变量处理规则</strong>：按真实训练代码执行，直接使用六项指标原始数值（PLT、Alb、Cr、PCT、Urea、TBil）代入回归方程。</li>
+                        <li><strong>变量处理规则</strong>：按真实训练代码执行，直接使用六项指标原始数值代入回归方程。</li>
                         <li><strong>完整截距与六项回归系数</strong>：见下方参数明细。</li>
-                        <li><strong>预测概率计算公式</strong>：$Z = \beta_0 + \beta_{\text{PLT}} X_{\text{PLT}} + \beta_{\text{Alb}} X_{\text{Alb}} + \beta_{\text{Cr}} X_{\text{Cr}} + \beta_{\text{PCT}} X_{\text{PCT}} + \beta_{\text{Urea}} X_{\text{Urea}} + \beta_{\text{TBil}} X_{\text{TBil}}$，$P = \frac{1}{1 + e^{-Z}}$。</li>
+                        <li><strong>预测概率计算公式</strong>：$Z = \beta_0 + \sum_{i=1}^{6}\beta_i X_i$，$P = \frac{1}{1 + e^{-Z}}$。</li>
                     </ul>
                     <pre class="mono-block" id="out-model-params"></pre>
                 </div>
@@ -631,7 +644,7 @@
                 <div class="collapse-body">
                     <ul>
                         <li><strong>研究队列与时间跨度</strong>：立克次体病回顾性临床队列，训练集为本院 2019–2024 年病例，全队列含插补后 24 小时内数据。</li>
-                        <li><strong>预测时间口径</strong>：输出为“住院期间脓毒血症预测概率”。若未剔除基线/早期已发生脓毒症病例或未限定为预测起点后新发病例，不应直接等同于“未来新发脓毒症发生风险”。</li>
+                        <li><strong>预测时间口径</strong>：输出为“住院期间脓毒症预测概率”。若未剔除基线或早期已发生脓毒症病例，或未限定为预测起点后新发病例，不应直接等同于“未来新发脓毒症发生风险”。</li>
                         <li><strong>使用限制</strong>：本工具仅用于临床科研与教学辅助评估，不能替代临床诊断、病情判断或医师决策。</li>
                     </ul>
                 </div>
@@ -648,6 +661,7 @@
 <script>
     const VARS = ["plt", "alb", "cr", "pct", "urea", "tbil"];
     const LOG_VARS = ["cr", "pct", "urea", "tbil"];
+    const PHENO_KEYS = ["表型 1", "表型 2", "表型 3"];
 
     const CONFIG = {
         rocCutoff: 0.497,
@@ -677,40 +691,40 @@
             tbil: { mean: 1.13483295,   sd: 0.22710609 }
         },
         centers: {
-            "Phenotype 1": { plt:  2.485726, alb:  0.035900, cr: -0.264590, pct: -0.269146, urea: -0.335068, tbil: -0.275798 },
-            "Phenotype 2": { plt: -0.177330, alb:  0.144233, cr: -0.239377, pct: -0.257512, urea: -0.264199, tbil: -0.130075 },
-            "Phenotype 3": { plt: -0.684732, alb: -0.826998, cr:  1.510416, pct:  1.614424, urea:  1.695985, tbil:  0.909536 }
+            "表型 1": { plt:  2.485726, alb:  0.035900, cr: -0.264590, pct: -0.269146, urea: -0.335068, tbil: -0.275798 },
+            "表型 2": { plt: -0.177330, alb:  0.144233, cr: -0.239377, pct: -0.257512, urea: -0.264199, tbil: -0.130075 },
+            "表型 3": { plt: -0.684732, alb: -0.826998, cr:  1.510416, pct:  1.614424, urea:  1.695985, tbil:  0.909536 }
         },
         phenoStyle: {
-            "Phenotype 1": { badge: "聚类空间最近邻：Phenotype 1", cls: "badge-ok" },
-            "Phenotype 2": { badge: "聚类空间最近邻：Phenotype 2", cls: "badge-warn" },
-            "Phenotype 3": { badge: "聚类空间最近邻：Phenotype 3", cls: "badge-danger" }
+            "表型 1": { badge: "聚类空间最近邻：表型 1", cls: "badge-ok" },
+            "表型 2": { badge: "聚类空间最近邻：表型 2", cls: "badge-warn" },
+            "表型 3": { badge: "聚类空间最近邻：表型 3", cls: "badge-danger" }
         }
     };
 
     const META = [
-        { key: "plt",  label: "血小板 PLT",    unit: "×10⁹/L", refLow: 125,  refHigh: 350,   refText: "125–350 ×10⁹/L",   isExt: (v) => v > 1000 },
-        { key: "alb",  label: "白蛋白 Alb",    unit: "g/L",    refLow: 40.0, refHigh: 55.0,  refText: "40.0–55.0 g/L",     isExt: (v) => v < 10 || v > 70 },
-        { key: "cr",   label: "肌酐 Cr",       unit: "μmol/L", refLow: 44.0, refHigh: 133.0, refText: "44.0–133.0 μmol/L", isExt: (v) => v > 1500 },
-        { key: "pct",  label: "降钙素原 PCT",  unit: "ng/mL",  refLow: null, refHigh: 0.05,  refText: "< 0.05 ng/mL",        isExt: (v) => v > 200 },
-        { key: "urea", label: "尿素 Urea",     unit: "mmol/L", refLow: 2.9,  refHigh: 8.2,   refText: "2.9–8.2 mmol/L",    isExt: (v) => v > 80 },
-        { key: "tbil", label: "总胆红素 TBil", unit: "μmol/L", refLow: 3.4,  refHigh: 20.5,  refText: "3.4–20.5 μmol/L",   isExt: (v) => v > 600 }
+        { key: "plt",  label: "血小板",   cnKey: "血小板",   unit: "×10⁹/L", refLow: 125,  refHigh: 350,   refText: "125–350 ×10⁹/L",   isExt: (v) => v > 1000 },
+        { key: "alb",  label: "白蛋白",   cnKey: "白蛋白",   unit: "g/L",    refLow: 40.0, refHigh: 55.0,  refText: "40.0–55.0 g/L",     isExt: (v) => v < 10 || v > 70 },
+        { key: "cr",   label: "肌酐",     cnKey: "肌酐",     unit: "μmol/L", refLow: 44.0, refHigh: 133.0, refText: "44.0–133.0 μmol/L", isExt: (v) => v > 1500 },
+        { key: "pct",  label: "降钙素原", cnKey: "降钙素原", unit: "ng/mL",  refLow: null, refHigh: 0.05,  refText: "< 0.05 ng/mL",        isExt: (v) => v > 200 },
+        { key: "urea", label: "尿素",     cnKey: "尿素",     unit: "mmol/L", refLow: 2.9,  refHigh: 8.2,   refText: "2.9–8.2 mmol/L",    isExt: (v) => v > 80 },
+        { key: "tbil", label: "总胆红素", cnKey: "总胆红素", unit: "μmol/L", refLow: 3.4,  refHigh: 20.5,  refText: "3.4–20.5 μmol/L",   isExt: (v) => v > 600 }
     ];
 
     function initParamDump() {
         document.getElementById("out-model-params").textContent = JSON.stringify({
-            kmeans: {
-                variables: ["PLT", "Alb", "Cr", "PCT", "Urea", "TBil"],
-                log10_plus_1_vars: ["Cr", "PCT", "Urea", "TBil"],
-                train_scale: CONFIG.trainScale,
-                cluster_centers: CONFIG.centers,
-                pheno_order_rule: "按各聚类对应人群 PLT 均值降序排列为 Phenotype 1、Phenotype 2、Phenotype 3"
+            聚类模型: {
+                指标: ["血小板", "白蛋白", "肌酐", "降钙素原", "尿素", "总胆红素"],
+                对数转换指标_log10_x_加_1: ["肌酐", "降钙素原", "尿素", "总胆红素"],
+                训练集标准化参数: CONFIG.trainScale,
+                三个聚类中心: CONFIG.centers,
+                编号规则: "按各聚类对应人群血小板均值降序排列为表型 1、表型 2、表型 3"
             },
-            logistic_regression: {
-                input_rule: "按真实训练代码使用原始输入值（PLT, Alb, Cr, PCT, Urea, TBil）",
-                intercept: CONFIG.intercept,
-                coefficients: CONFIG.coef,
-                roc_cutoff_train: CONFIG.rocCutoff
+            逻辑回归模型: {
+                变量口径: "按真实训练代码使用六项指标原始输入值",
+                截距: CONFIG.intercept,
+                回归系数: CONFIG.coef,
+                训练集受试者工作特征曲线统计界值: CONFIG.rocCutoff
             }
         }, null, 2);
     }
@@ -723,6 +737,7 @@
             document.getElementById("ext-" + k).style.display = "none";
         });
         document.getElementById("result-section").style.display = "none";
+        document.getElementById("out-trace-content").innerHTML = "";
     }
 
     function getRefHint(val, m) {
@@ -754,10 +769,11 @@
         });
 
         const distances = {};
-        let nearestPheno = "Phenotype 1";
+        let nearestPheno = "表型 1";
         let minDist = Infinity;
 
-        Object.entries(CONFIG.centers).forEach(([pName, center]) => {
+        PHENO_KEYS.forEach((pName) => {
+            const center = CONFIG.centers[pName];
             let sqSum = 0;
             VARS.forEach((k) => {
                 const diff = zScores[k] - center[k];
@@ -803,9 +819,8 @@
         const barW = Math.min(44, colW * 0.45);
 
         let barsSvg = "";
-        VARS.forEach((k, idx) => {
-            const z = zScores[k];
-            const label = k.toUpperCase();
+        META.forEach((m, idx) => {
+            const z = zScores[m.key];
             const cx = padLeft + idx * colW + colW / 2;
             const scaledH = (Math.abs(z) / bound) * (plotH / 2);
             const y = z >= 0 ? zeroY - scaledH : zeroY;
@@ -814,11 +829,11 @@
             barsSvg += `<rect x="${(cx - barW / 2).toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(2, scaledH).toFixed(1)}" rx="4" fill="${fill}" />`;
             const valLabelY = z >= 0 ? Math.max(14, y - 5) : Math.min(height - padBottom - 4, y + scaledH + 13);
             barsSvg += `<text x="${cx.toFixed(1)}" y="${valLabelY.toFixed(1)}" text-anchor="middle" font-size="11" fill="#1f2937" font-weight="600">${z.toFixed(2)}</text>`;
-            barsSvg += `<text x="${cx.toFixed(1)}" y="${(height - 12).toFixed(1)}" text-anchor="middle" font-size="12" fill="#374151" font-weight="600">${label}</text>`;
+            barsSvg += `<text x="${cx.toFixed(1)}" y="${(height - 12).toFixed(1)}" text-anchor="middle" font-size="11" fill="#374151" font-weight="600">${m.cnKey}</text>`;
         });
 
         document.getElementById("out-zscore-chart").innerHTML = `
-            <svg viewBox="0 0 ${width} ${height}" width="100%" height="${height}" role="img" aria-label="六项指标标准化 Z-score 柱状图">
+            <svg viewBox="0 0 ${width} ${height}" width="100%" height="${height}" role="img" aria-label="六项指标标准化分值柱状图">
                 <line x1="${padLeft}" y1="${padTop}" x2="${padLeft}" y2="${padTop + plotH}" stroke="#cbd5e1" stroke-width="1" />
                 <line x1="${padLeft}" y1="${zeroY.toFixed(1)}" x2="${width - padRight}" y2="${zeroY.toFixed(1)}" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4,3" />
                 <text x="${padLeft - 8}" y="${padTop + 6}" text-anchor="end" font-size="11" fill="#6b7280">+${bound.toFixed(1)}</text>
@@ -869,9 +884,9 @@
 
         document.getElementById("out-pheno-dists").innerHTML =
             `<strong>到三个聚类中心的欧氏距离：</strong>` +
-            `Phenotype 1 = <strong>${res.distances["Phenotype 1"].toFixed(4)}</strong>，` +
-            `Phenotype 2 = <strong>${res.distances["Phenotype 2"].toFixed(4)}</strong>，` +
-            `Phenotype 3 = <strong>${res.distances["Phenotype 3"].toFixed(4)}</strong>`;
+            `表型 1 = <strong>${res.distances["表型 1"].toFixed(4)}</strong>，` +
+            `表型 2 = <strong>${res.distances["表型 2"].toFixed(4)}</strong>，` +
+            `表型 3 = <strong>${res.distances["表型 3"].toFixed(4)}</strong>`;
 
         document.getElementById("out-pheno-reason").innerHTML =
             `<strong>归入原因：</strong>当前样本标准化特征与 <strong>${res.nearestPheno}</strong> 聚类中心的欧氏距离最小（${res.minDist.toFixed(4)}）。`;
@@ -896,28 +911,29 @@
             tbody.appendChild(tr);
         });
 
-        const logOnly = {};
-        LOG_VARS.forEach((k) => {
-            logOnly[k] = Number(res.logTransformed[k].toFixed(6));
+        const rawCn = {};
+        const logCn = {};
+        const zCn = {};
+        META.forEach((m) => {
+            rawCn[m.cnKey] = rawData[m.key];
+            if (LOG_VARS.includes(m.key)) {
+                logCn[m.cnKey] = Number(res.logTransformed[m.key].toFixed(6));
+            }
+            zCn[m.cnKey] = Number(res.zScores[m.key].toFixed(6));
         });
 
-        const zRounded = {};
-        VARS.forEach((k) => {
-            zRounded[k] = Number(res.zScores[k].toFixed(6));
-        });
-
-        const distRounded = {};
-        Object.entries(res.distances).forEach(([k, v]) => {
-            distRounded[k] = Number(v.toFixed(6));
+        const distCn = {};
+        PHENO_KEYS.forEach((pName) => {
+            distCn[pName] = Number(res.distances[pName].toFixed(6));
         });
 
         document.getElementById("out-trace-content").innerHTML =
-            `<div><strong>1. 六项指标实际输入值</strong><pre class="mono-block">${JSON.stringify(rawData, null, 2)}</pre></div>` +
-            `<div><strong>2. 对数转换后的四项指标（log10(x + 1)）</strong><pre class="mono-block">${JSON.stringify(logOnly, null, 2)}</pre></div>` +
-            `<div><strong>3. 六项指标标准化后的 Z-score</strong><pre class="mono-block">${JSON.stringify(zRounded, null, 2)}</pre></div>` +
-            `<div><strong>4. 到三个聚类中心的欧氏距离</strong><pre class="mono-block">${JSON.stringify(distRounded, null, 2)}</pre></div>` +
-            `<div><strong>5. 最终 Phenotype 归属</strong><pre class="mono-block">${res.nearestPheno}</pre></div>` +
-            `<div><strong>6. Logistic 回归线性预测值及最终概率</strong><pre class="mono-block">线性预测值 Z = ${res.zLinear.toFixed(6)}\n预测概率   P = ${res.prob.toFixed(6)} (${probPct})</pre></div>`;
+            `<div><strong>1. 六项指标实际输入值</strong><pre class="mono-block">${JSON.stringify(rawCn, null, 2)}</pre></div>` +
+            `<div><strong>2. 对数转换后的四项指标（以 10 为底加 1 转换）</strong><pre class="mono-block">${JSON.stringify(logCn, null, 2)}</pre></div>` +
+            `<div><strong>3. 六项指标标准化后的标准化分值</strong><pre class="mono-block">${JSON.stringify(zCn, null, 2)}</pre></div>` +
+            `<div><strong>4. 到三个聚类中心的欧氏距离</strong><pre class="mono-block">${JSON.stringify(distCn, null, 2)}</pre></div>` +
+            `<div><strong>5. 最终临床表型归属</strong><pre class="mono-block">${res.nearestPheno}</pre></div>` +
+            `<div><strong>6. 逻辑回归线性预测值及最终概率</strong><pre class="mono-block">线性预测值 = ${res.zLinear.toFixed(6)}\n预测概率   = ${res.prob.toFixed(6)} (${probPct})</pre></div>`;
     }
 
     initParamDump();
